@@ -17,4 +17,8 @@ public class BaseResponse<T> {
         this.message = message;
         this.data = data;
     }
+
+    public static BaseResponse successResponse() {
+        return BaseResponse.builder().success(true).errorCode(ErrorStatus.SUCCESS.getCode()).build();
+    }
 }
