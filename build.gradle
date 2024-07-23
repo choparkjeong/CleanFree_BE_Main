@@ -46,8 +46,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	//mysql
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	//postgresql
+	implementation 'org.postgresql:postgresql'
 	//spring cloud config
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 }

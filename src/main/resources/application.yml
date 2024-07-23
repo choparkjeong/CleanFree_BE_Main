@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cleanfree-main-service
+    name: main-service
 
   profiles:
     active: none
