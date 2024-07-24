@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.cleanfree.be_main.auth.dto.MemberSnsLoginRequestDto;
 
 @Entity
 @Getter
@@ -34,5 +35,15 @@ public class Member {
         this.phoneNum = phoneNum;
         this.sex = sex;
         this.uuid = uuid;
+    }
+
+    public static Member converter(MemberSnsLoginRequestDto memberSnsLoginRequestDto) {
+        return Member.builder()
+                .email(memberSnsLoginRequestDto.getEmail())
+                .name(memberSnsLoginRequestDto.getName())
+                .phoneNum(memberSnsLoginRequestDto.getPhoneNumber())
+                .sex(memberSnsLoginRequestDto.getSex())
+                .uuid(memberSnsLoginRequestDto.getUuid())
+                .build();
     }
 }

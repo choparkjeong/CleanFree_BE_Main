@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.cleanfree.be_main.auth.dto.MemberSnsLoginRequestDto;
 
 @Entity
 @Getter
@@ -27,5 +28,13 @@ public class SnsInfo {
         this.snsType = snsType;
         this.snsId = snsId;
         this.member = member;
+    }
+
+    public static SnsInfo converter(MemberSnsLoginRequestDto memberSnsLoginRequestDto, Member member) {
+        return SnsInfo.builder()
+                .snsType(memberSnsLoginRequestDto.getSnsType())
+                .snsId(memberSnsLoginRequestDto.getSnsId())
+                .member(member)
+                .build();
     }
 }
