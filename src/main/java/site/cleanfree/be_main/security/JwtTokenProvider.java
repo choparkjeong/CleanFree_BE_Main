@@ -5,10 +5,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +22,6 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-
-    private final Environment env;
-
     @Value("${JWT.SECRET_KEY}")
     private String secretKey;
 
@@ -36,7 +33,7 @@ public class JwtTokenProvider {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(env.getProperty("JWT.SECRET_KEY"));
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -67,8 +64,27 @@ public class JwtTokenProvider {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis())) //토근 발행 시간
                 .setExpiration(
-                        new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME)) //토큰 만료 시간
+                        new Date(System.currentTimeMillis() + 30 * 1000)) //토큰 만료 시간
+//                        new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME)) //토큰 만료 시간
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    // JWT 토큰의 유효성 및 만료일자 확인
+    public boolean validateToken(String token, UserDetails userDetails) {
+        try {
+            Claims claims = extractAllClaims(token);
+            String uuid = claims.getSubject();
+            return (uuid.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        } catch (SignatureException e) {
+            log.error("Invalid JWT signature: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    // JWT 토큰의 만료일자 확인
+    private boolean isTokenExpired(String token) {
+        Date expiration = extractClaim(token, Claims::getExpiration);
+        return expiration.before(new Date());
     }
 }

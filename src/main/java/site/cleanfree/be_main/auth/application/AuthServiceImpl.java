@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
             // SnsInfo 및 Member 정보 저장
             Member member = Member.converter(memberSnsLoginRequestDto);
             memberRepository.save(member);
-            snsInfoRepository.save(SnsInfo.converter(memberSnsLoginRequestDto, member));
+            snsInfoRepository.save(SnsInfo.converter(memberSnsLoginRequestDto, uuid));
 
             // token 생성
             String token = createToken(uuid);
@@ -47,10 +47,10 @@ public class AuthServiceImpl implements AuthService {
 
         // SNS 정보가 존재하는 경우 처리
         SnsInfo snsInfo = optionalSnsInfo.get();
-        String token = createToken(snsInfo.getMember().getUuid());
+        String token = createToken(snsInfo.getUuid());
         return TokenResponseDto.builder()
                 .accessToken(token)
-                .uuid(snsInfo.getMember().getUuid())
+                .uuid(snsInfo.getUuid())
                 .build();
     }
 

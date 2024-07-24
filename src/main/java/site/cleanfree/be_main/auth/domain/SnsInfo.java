@@ -16,25 +16,25 @@ public class SnsInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sns_info_id")
     private Long id;
-    @Column(name = "sns_type", nullable = false)
-    private String snsType;
+//    @Column(name = "sns_type", nullable = false)
+//    private String snsType;
     @Column(name = "sns_id", nullable = false)
     private String snsId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    @Column(name = "uuid", nullable = false)
+    private String uuid;
 
     @Builder
-    public SnsInfo(String snsType, String snsId, Member member) {
-        this.snsType = snsType;
+    public SnsInfo(String snsType, String snsId, String uuid) {
+//        this.snsType = snsType;
         this.snsId = snsId;
-        this.member = member;
+        this.uuid = uuid;
     }
 
-    public static SnsInfo converter(MemberSnsLoginRequestDto memberSnsLoginRequestDto, Member member) {
+    public static SnsInfo converter(MemberSnsLoginRequestDto memberSnsLoginRequestDto, String uuid) {
         return SnsInfo.builder()
-                .snsType(memberSnsLoginRequestDto.getSnsType())
+//                .snsType(memberSnsLoginRequestDto.getSnsType())
                 .snsId(memberSnsLoginRequestDto.getSnsId())
-                .member(member)
+                .uuid(memberSnsLoginRequestDto.getUuid())
                 .build();
     }
 }

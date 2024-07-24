@@ -32,7 +32,6 @@ public class AuthController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, tokenResponseDto.getAccessToken())
-                .header("uuid", tokenResponseDto.getUuid())
                 .body(BaseResponse.successResponse());
     }
 }
