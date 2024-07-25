@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 import site.cleanfree.be_main.common.BaseTimeEntity;
+import site.cleanfree.be_main.diary.state.SkinStatus;
 
 @NoArgsConstructor
 @Getter
@@ -16,7 +17,7 @@ public class Diary extends BaseTimeEntity {
 
     @Id
     private String id;
-    private String skinStatus;
+    private SkinStatus skinStatus;
     private String thumbnailUrl;
     private List<String> cosmetics;
     private boolean isAlcohol;
