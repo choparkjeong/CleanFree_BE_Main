@@ -25,7 +25,6 @@ public class AuthServiceImpl implements AuthService {
     private final SnsInfoRepository snsInfoRepository;
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UuidProvider uuidProvider;
 
     @Override
     @Transactional
@@ -34,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (optionalSnsInfo.isEmpty()) {
             log.info("First time login user.");
-            String uuid = uuidProvider.generateUuid();
+            String uuid = UuidProvider.generateMemberUuid();
             memberSnsLoginRequestDto.setUuid(uuid);
 
             // SnsInfo 및 Member 정보 저장
