@@ -17,6 +17,7 @@ public class Diary extends BaseTimeEntity {
 
     @Id
     private String id;
+    private String memberUuid;
     private SkinStatus skinStatus;
     private String thumbnailUrl;
     private List<String> cosmetics;
