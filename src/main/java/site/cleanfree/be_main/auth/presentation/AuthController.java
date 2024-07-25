@@ -12,6 +12,7 @@ import site.cleanfree.be_main.auth.dto.MemberSnsLoginRequestDto;
 import site.cleanfree.be_main.auth.dto.TokenResponseDto;
 import site.cleanfree.be_main.auth.infrastructure.SnsInfoRepository;
 import site.cleanfree.be_main.common.BaseResponse;
+import site.cleanfree.be_main.security.JwtTokenProvider;
 
 @RestController
 @Slf4j
@@ -20,6 +21,7 @@ import site.cleanfree.be_main.common.BaseResponse;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
     private final AuthService authService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = "로그인 API")
@@ -39,6 +41,8 @@ public class AuthController {
     ) {
         log.info("token >>> {}", token);
         return ResponseEntity.ok()
-                .body(BaseResponse.successResponse());
+                .body(BaseResponse.builder()
+                        .data("uuid >>> " + jwtTokenProvider.getUuid(token))
+                        .build());
     }
 }

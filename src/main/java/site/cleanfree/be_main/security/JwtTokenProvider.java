@@ -64,8 +64,7 @@ public class JwtTokenProvider {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis())) //토근 발행 시간
                 .setExpiration(
-                        new Date(System.currentTimeMillis() + 30 * 1000)) //토큰 만료 시간
-//                        new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME)) //토큰 만료 시간
+                        new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME)) //토큰 만료 시간
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
