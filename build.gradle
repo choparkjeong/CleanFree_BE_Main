@@ -48,6 +48,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	//postgresql
 	implementation 'org.postgresql:postgresql'
+	//mongodb
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	//spring cloud config
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	//swagger
