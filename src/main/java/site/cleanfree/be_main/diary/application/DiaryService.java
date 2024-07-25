@@ -5,6 +5,9 @@ import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.diary.dto.DiaryResponseDto;
 import site.cleanfree.be_main.diary.dto.DiaryUpdateRequestDto;
 import site.cleanfree.be_main.diary.dto.DiaryWriteRequestDto;
+import site.cleanfree.be_main.diary.dto.GetDiaryListDto;
+
+import java.util.List;
 
 @Service
 public interface DiaryService {
@@ -15,4 +18,5 @@ public interface DiaryService {
 
     BaseResponse<DiaryResponseDto> getDiaryById(String token, String diaryId);
 
+    BaseResponse<List<GetDiaryListDto>> getDiaryList(String token);
 }

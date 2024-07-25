@@ -13,8 +13,11 @@ import site.cleanfree.be_main.diary.domain.Diary;
 import site.cleanfree.be_main.diary.dto.DiaryUpdateRequestDto;
 import site.cleanfree.be_main.diary.dto.DiaryWriteRequestDto;
 import site.cleanfree.be_main.diary.dto.DiaryResponseDto;
+import site.cleanfree.be_main.diary.dto.GetDiaryListDto;
 import site.cleanfree.be_main.diary.infrastructure.DiaryRepository;
 import site.cleanfree.be_main.security.JwtTokenProvider;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -149,5 +152,14 @@ public class DiaryServiceImpl implements DiaryService {
                 .writeTime(diary.getWriteTime())
                 .build())
             .build();
+    }
+
+    // 최신순으로 피부 일지 리스트 조회
+    @Override
+    public BaseResponse<List<GetDiaryListDto>> getDiaryList(String token) {
+        String uuid = jwtTokenProvider.getUuid(token);
+
+        return BaseResponse.successResponse(
+                "Find diary List success", diaryRepository.findAllByMemberUuidOrderByWriteTime(uuid));
     }
 }
