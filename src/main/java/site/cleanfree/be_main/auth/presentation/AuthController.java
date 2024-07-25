@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.cleanfree.be_main.auth.application.AuthService;
 import site.cleanfree.be_main.auth.dto.MemberSnsLoginRequestDto;
 import site.cleanfree.be_main.auth.dto.TokenResponseDto;
@@ -25,13 +22,23 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    @Operation(summary = "로그인", description = "로그인")
+    @Operation(summary = "로그인 API", description = "로그인 API")
     public ResponseEntity<BaseResponse> login(
             @RequestBody MemberSnsLoginRequestDto memberSnsLoginRequestDto) {
         TokenResponseDto tokenResponseDto = authService.snsLogin(memberSnsLoginRequestDto);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, tokenResponseDto.getAccessToken())
+                .body(BaseResponse.successResponse());
+    }
+
+    @GetMapping("/test")
+    @Operation(summary = "로그인 테스트 API", description = "로그인 테스트 API")
+    public ResponseEntity<BaseResponse> test(
+            @RequestHeader String token
+    ) {
+        log.info("token >>> {}", token);
+        return ResponseEntity.ok()
                 .body(BaseResponse.successResponse());
     }
 }

@@ -1,6 +1,7 @@
 package site.cleanfree.be_main.auth.application;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
     private final SnsInfoRepository snsInfoRepository;
     private final MemberRepository memberRepository;
@@ -29,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<SnsInfo> optionalSnsInfo = snsInfoRepository.findBySnsId(memberSnsLoginRequestDto.getSnsId());
 
         if (optionalSnsInfo.isEmpty()) {
+            log.info("First time login user.");
             String uuid = generateUuid();
             memberSnsLoginRequestDto.setUuid(uuid);
 
