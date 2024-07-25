@@ -2,9 +2,11 @@ package site.cleanfree.be_main.common;
 
 import lombok.Builder;
 import lombok.Getter;
+import site.cleanfree.be_main.common.exception.ErrorStatus;
 
 @Getter
 public class BaseResponse<T> {
+
     private final boolean success;
     private final int errorCode; // success = true 인 경우, 1000
     private final String message;
@@ -19,6 +21,7 @@ public class BaseResponse<T> {
     }
 
     public static BaseResponse successResponse() {
-        return BaseResponse.builder().success(true).errorCode(ErrorStatus.SUCCESS.getCode()).build();
+        return BaseResponse.builder().success(true).errorCode(ErrorStatus.SUCCESS.getCode())
+            .build();
     }
 }
