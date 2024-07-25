@@ -23,7 +23,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     @Value("${JWT.SECRET_KEY}")
-    private String secretKey;
+    private String SECRET_KEY;
 
     @Value("${JWT.ACCESS_EXPIRATION_TIME}")
     private long ACCESS_TOKEN_EXPIRATION_TIME;
@@ -33,7 +33,7 @@ public class JwtTokenProvider {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
