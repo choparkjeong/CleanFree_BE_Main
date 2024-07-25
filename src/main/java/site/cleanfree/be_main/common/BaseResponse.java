@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class BaseResponse<T> {
     private final boolean success;
-    private final int errorCode; // success = true 인 경우, 1000
+    private final int errorCode;
     private final String message;
     private final T data;
 
@@ -18,7 +18,12 @@ public class BaseResponse<T> {
         this.data = data;
     }
 
-    public static BaseResponse successResponse() {
-        return BaseResponse.builder().success(true).errorCode(ErrorStatus.SUCCESS.getCode()).build();
+    public static <T> BaseResponse<T> successResponse(String message, T data) {
+        return BaseResponse.<T>builder()
+                .success(true)
+                .errorCode(ErrorStatus.SUCCESS.getCode())
+                .message(message)
+                .data(data)
+                .build();
     }
 }

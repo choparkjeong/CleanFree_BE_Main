@@ -25,24 +25,22 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = "로그인 API")
-    public ResponseEntity<BaseResponse> login(
+    public ResponseEntity<BaseResponse<Object>> login(
             @RequestBody MemberSnsLoginRequestDto memberSnsLoginRequestDto) {
         TokenResponseDto tokenResponseDto = authService.snsLogin(memberSnsLoginRequestDto);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, tokenResponseDto.getAccessToken())
-                .body(BaseResponse.successResponse());
+                .body(BaseResponse.successResponse("로그인 성공", null));
     }
 
     @GetMapping("/test")
     @Operation(summary = "로그인 테스트 API", description = "로그인 테스트 API")
-    public ResponseEntity<BaseResponse> test(
+    public ResponseEntity<BaseResponse<String>> test(
             @RequestHeader String token
     ) {
         log.info("token >>> {}", token);
         return ResponseEntity.ok()
-                .body(BaseResponse.builder()
-                        .data("uuid >>> " + jwtTokenProvider.getUuid(token))
-                        .build());
+                .body(BaseResponse.successResponse("테스트 성공", jwtTokenProvider.getUuid(token)));
     }
 }
