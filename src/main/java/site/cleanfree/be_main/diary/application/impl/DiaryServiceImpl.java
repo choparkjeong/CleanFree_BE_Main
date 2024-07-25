@@ -93,7 +93,7 @@ public class DiaryServiceImpl implements DiaryService {
                 .isExercise(diaryUpdateRequestDto.isExercise())
                 .sleepTime(diaryUpdateRequestDto.getSleepTime())
                 .memo(diaryUpdateRequestDto.getMemo())
-                .writeTime(TimeConvertor.utcToKst(diaryUpdateRequestDto.getWriteTime()))
+                .writeTime(diaryUpdateRequestDto.getWriteTime())
                 .build()
         );
 
