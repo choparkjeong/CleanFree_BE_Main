@@ -163,7 +163,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public BaseResponse<List<GetDiaryListDto>> getDiaryList(String token) {
-        String uuid = jwtTokenProvider.getUuid(token);
+        String uuid = getMemberUuid(token);
 
         List<GetDiaryListDto> getDiaryListDtoList = diaryRepository.findAllByMemberUuidOrderByWriteTimeDesc(uuid);
 
