@@ -20,4 +20,8 @@ public class GetDiaryListDto {
     public void setDayDifference(String dayDifference) {
         this.dayDifference = dayDifference;
     }
+
+    public void setWriteTime(String writeTime) {
+        this.writeTime = writeTime;
+    }
 }

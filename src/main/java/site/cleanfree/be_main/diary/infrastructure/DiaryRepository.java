@@ -10,5 +10,5 @@ import site.cleanfree.be_main.diary.dto.GetDiaryListDto;
 public interface DiaryRepository extends MongoRepository<Diary, String> {
 
     Optional<Diary> getDiaryByMemberUuidAndDiaryId(String memberUuid, String diaryId);
-    List<GetDiaryListDto> findAllByMemberUuidOrderByWriteTime(String uuid);
+    List<GetDiaryListDto> findAllByMemberUuidOrderByWriteTimeDesc(String uuid);
 }
