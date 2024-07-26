@@ -30,9 +30,11 @@ public class JwtTokenProvider {
 
     public String getUuid(String token) {
         try {
-            String jwt = token.substring(7).trim();
-            log.info("jwt: {}", jwt);
-            return extractClaim(jwt, Claims::getSubject);
+            if (token.contains("Bearer ")) {
+                token = token.substring(7).trim();
+            }
+            log.info("jwt: {}", token);
+            return extractClaim(token, Claims::getSubject);
         } catch (Exception e) {
             log.info("Error parsing JWT: {}", e);
             return null;
