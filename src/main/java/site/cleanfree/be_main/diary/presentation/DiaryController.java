@@ -34,34 +34,34 @@ public class DiaryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<DiaryResponseDto>> getDiaryById(
-        @RequestHeader String token,
+        @RequestHeader String Authorization,
         @PathVariable(value = "id") String id
     ) {
-        return ResponseEntity.ok(diaryService.getDiaryById(token, id));
+        return ResponseEntity.ok(diaryService.getDiaryById(Authorization, id));
     }
 
     @PostMapping("/write")
     public ResponseEntity<BaseResponse<?>> writeDiary(
-        @RequestHeader String token,
+        @RequestHeader String Authorization,
         @RequestBody DiaryWriteRequestDto diaryWriteRequestDto
     ) {
-        return ResponseEntity.ok(diaryService.writeDiary(token, diaryWriteRequestDto));
+        return ResponseEntity.ok(diaryService.writeDiary(Authorization, diaryWriteRequestDto));
     }
 
     @PutMapping("/update")
     public ResponseEntity<BaseResponse<?>> updateDiary(
-        @RequestHeader String token,
+        @RequestHeader String Authorization,
         @RequestBody DiaryUpdateRequestDto diaryUpdateRequestDto
     ) {
-        return ResponseEntity.ok(diaryService.updateDiary(token, diaryUpdateRequestDto));
+        return ResponseEntity.ok(diaryService.updateDiary(Authorization, diaryUpdateRequestDto));
     }
 
     @GetMapping("/diary-list")
     @Operation(summary = "피부 일지 리스트 조회 API", description = "피부 일지 리스트 조회 API")
     public ResponseEntity<BaseResponse<List<GetDiaryListDto>>> getDiaryList(
-            @RequestHeader String token
+            @RequestHeader String Authorization
     ) {
         return ResponseEntity.ok()
-                .body(diaryService.getDiaryList(token));
+                .body(diaryService.getDiaryList(Authorization));
     }
 }
