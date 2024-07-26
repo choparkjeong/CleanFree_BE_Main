@@ -29,7 +29,12 @@ public class JwtTokenProvider {
     private long ACCESS_TOKEN_EXPIRATION_TIME;
 
     public String getUuid(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            return extractClaim(token, Claims::getSubject);
+        } catch (Exception e) {
+            log.info("Error parsing JWT: {}", e);
+            return null;
+        }
     }
 
     private Key getSigningKey() {
