@@ -22,6 +22,6 @@ public class DiaryUpdateRequestDto {
     private boolean isExercise;
     private String sleepTime;
     private String memo;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate writeTime;
 }
