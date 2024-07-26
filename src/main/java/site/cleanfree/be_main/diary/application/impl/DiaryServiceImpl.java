@@ -201,14 +201,17 @@ public class DiaryServiceImpl implements DiaryService {
         LocalDateTime writeDateTime = LocalDateTime.parse(writeTime, formatter);
         log.info("writeDateTime >>> {}", writeDateTime.toString());
 
+        // 날짜 부분만 가져오기
+        LocalDate writeDate = writeDateTime.toLocalDate();
+
         // 현재 시간 가져오기 (KST)
-        LocalDateTime nowKST = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDate nowKST = LocalDate.now(ZoneId.of("Asia/Seoul"));
         log.info("nowKST >>> {}", nowKST.toString());
 
         // writeTime과 현재 시간의 차이 계산
-        long daysBetween = ChronoUnit.DAYS.between(writeDateTime, nowKST);
-        long monthsBetween = ChronoUnit.MONTHS.between(writeDateTime, nowKST);
-        long yearsBetween = ChronoUnit.YEARS.between(writeDateTime, nowKST);
+        long daysBetween = ChronoUnit.DAYS.between(writeDate, nowKST);
+        long monthsBetween = ChronoUnit.MONTHS.between(writeDate, nowKST);
+        long yearsBetween = ChronoUnit.YEARS.between(writeDate, nowKST);
         log.info("yearsBetween >>> {}, monthsBetween >>> {}, daysBetween >>> {}",
                 yearsBetween, monthsBetween, daysBetween);
 
