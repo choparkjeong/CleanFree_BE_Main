@@ -19,4 +19,6 @@ public interface DiaryService {
     BaseResponse<DiaryResponseDto> getDiaryById(String token, String diaryId);
 
     BaseResponse<List<GetDiaryListDto>> getDiaryList(String token);
+
+    BaseResponse<DiaryResponseDto> getRecentDiaryById(String token);
 }

@@ -11,4 +11,6 @@ public interface DiaryRepository extends MongoRepository<Diary, String> {
 
     Optional<Diary> getDiaryByMemberUuidAndDiaryId(String memberUuid, String diaryId);
     List<GetDiaryListDto> findAllByMemberUuidOrderByWriteTimeDesc(String uuid);
+
+    Optional<Diary> findTopByMemberUuidOrderByWriteTimeDesc(String memberUuid);
 }

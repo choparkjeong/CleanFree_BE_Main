@@ -56,12 +56,20 @@ public class DiaryController {
         return ResponseEntity.ok(diaryService.updateDiary(Authorization, diaryUpdateRequestDto));
     }
 
-    @GetMapping("/diary-list")
+    @GetMapping("/list")
     @Operation(summary = "피부 일지 리스트 조회 API", description = "피부 일지 리스트 조회 API")
     public ResponseEntity<BaseResponse<List<GetDiaryListDto>>> getDiaryList(
             @RequestHeader String Authorization
     ) {
         return ResponseEntity.ok()
                 .body(diaryService.getDiaryList(Authorization));
+    }
+
+    @GetMapping("/recent")
+    @Operation(summary = "최근 일지 조회 API", description = "최근 일지를 조회합니다. 없으면 null, 빈리스트로 응답합니다.")
+    public ResponseEntity<BaseResponse<DiaryResponseDto>> getRecentDiary(
+        @RequestHeader String Authorization
+    ) {
+        return ResponseEntity.ok(diaryService.getRecentDiaryById(Authorization));
     }
 }

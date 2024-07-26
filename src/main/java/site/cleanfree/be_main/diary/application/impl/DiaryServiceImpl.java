@@ -1,5 +1,6 @@
 package site.cleanfree.be_main.diary.application.impl;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -213,5 +214,37 @@ public class DiaryServiceImpl implements DiaryService {
 
         // 오늘인 경우
         return "오늘";
+    }
+
+    @Override
+    public BaseResponse<DiaryResponseDto> getRecentDiaryById(String token) {
+        String memberUuid = getMemberUuid(token);
+        Optional<Diary> diaryOpt = diaryRepository.findTopByMemberUuidOrderByWriteTimeDesc(memberUuid);
+
+        if (diaryOpt.isEmpty()) {
+            return BaseResponse.<DiaryResponseDto>builder()
+                .success(true)
+                .errorCode(ErrorStatus.SUCCESS.getCode())
+                .message("Not exist diary")
+                .data(null)
+                .build();
+        }
+        Diary diary = diaryOpt.get();
+        return BaseResponse.<DiaryResponseDto>builder()
+            .success(true)
+            .errorCode(ErrorStatus.SUCCESS.getCode())
+            .message("Find Recent diary success")
+            .data(DiaryResponseDto.builder()
+                .diaryId(diary.getDiaryId())
+                .skinStatus(diary.getSkinStatus())
+                .thumbnailUrl(diary.getThumbnailUrl())
+                .cosmetics(diary.getCosmetics())
+                .isAlcohol(diary.isAlcohol())
+                .isExercise(diary.isExercise())
+                .sleepTime(diary.getSleepTime())
+                .memo(diary.getMemo())
+                .writeTime(diary.getWriteTime())
+                .build())
+            .build();
     }
 }
