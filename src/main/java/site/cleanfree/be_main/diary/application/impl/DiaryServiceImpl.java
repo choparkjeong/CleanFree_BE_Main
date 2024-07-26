@@ -2,7 +2,6 @@ package site.cleanfree.be_main.diary.application.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.TimeConvertor;
@@ -23,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
+
+import static site.cleanfree.be_main.common.TimeConvertor.convertWriteTime;
 
 @Service
 @RequiredArgsConstructor
@@ -163,12 +164,14 @@ public class DiaryServiceImpl implements DiaryService {
     public BaseResponse<List<GetDiaryListDto>> getDiaryList(String token) {
         String uuid = jwtTokenProvider.getUuid(token);
 
-        List<GetDiaryListDto> getDiaryListDtoList = diaryRepository.findAllByMemberUuidOrderByWriteTime(uuid);
+        List<GetDiaryListDto> getDiaryListDtoList = diaryRepository.findAllByMemberUuidOrderByWriteTimeDesc(uuid);
 
         // 해당 리스트 들고와서 하나씩 처리
         for(GetDiaryListDto getDiaryListDto : getDiaryListDtoList) {
             String dayDifference = getDayDifference(getDiaryListDto.getWriteTime());
             getDiaryListDto.setDayDifference(dayDifference);
+            // 반환 시, writeTime 형식 변환
+            getDiaryListDto.setWriteTime(convertWriteTime(getDiaryListDto.getWriteTime()));
         }
 
         return BaseResponse.successResponse(
