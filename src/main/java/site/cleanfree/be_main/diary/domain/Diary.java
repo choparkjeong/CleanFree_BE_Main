@@ -1,6 +1,7 @@
 package site.cleanfree.be_main.diary.domain;
 
 import jakarta.persistence.Id;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public class Diary extends MongoBaseTimeEntity {
     private boolean isExercise;
     private String sleepTime;
     private String memo;
-    private LocalDateTime writeTime;
+    private LocalDate writeTime;
 
     @Builder
     public Diary(
@@ -42,7 +43,7 @@ public class Diary extends MongoBaseTimeEntity {
         boolean isExercise,
         String sleepTime,
         String memo,
-        LocalDateTime writeTime //KST로 저장됨
+        LocalDate writeTime //KST로 저장됨
     ) {
         this.id = id;
         this.diaryId = diaryId;

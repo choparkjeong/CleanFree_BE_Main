@@ -1,5 +1,6 @@
 package site.cleanfree.be_main.diary.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -20,5 +21,5 @@ public class DiaryResponseDto {
     private boolean isExercise;
     private String sleepTime;
     private String memo;
-    private LocalDateTime writeTime;
+    private LocalDate writeTime;
 }

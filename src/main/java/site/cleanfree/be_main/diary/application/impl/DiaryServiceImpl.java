@@ -1,5 +1,6 @@
 package site.cleanfree.be_main.diary.application.impl;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,25 +42,39 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public BaseResponse<?> writeDiary(String token, DiaryWriteRequestDto diaryWriteRequestDto) {
         try {
-            diaryRepository.save(
-                Diary.builder()
-                    .diaryId(UuidProvider.generateDiaryUuid())
-                    .memberUuid(getMemberUuid(token))
-                    .skinStatus(diaryWriteRequestDto.getSkinStatus())
-                    .thumbnailUrl(diaryWriteRequestDto.getThumbnailUrl())
-                    .cosmetics(diaryWriteRequestDto.getCosmetics())
-                    .isAlcohol(diaryWriteRequestDto.isAlcohol())
-                    .isExercise(diaryWriteRequestDto.isExercise())
-                    .sleepTime(diaryWriteRequestDto.getSleepTime())
-                    .memo(diaryWriteRequestDto.getMemo())
-                    .writeTime(TimeConvertor.utcStringToKst(diaryWriteRequestDto.getWriteTime()))
-                    .build()
-            );
+            String memberUuid = getMemberUuid(token);
+            String diaryId = UuidProvider.generateDiaryUuid();
+            LocalDate writeTime = TimeConvertor.utcStringToKst(diaryWriteRequestDto.getWriteTime());
+            Optional<Diary> diaryOpt = diaryRepository.findDiaryByMemberUuidAndWriteTime(memberUuid, writeTime);
+
+            if (diaryOpt.isEmpty()) {
+                diaryRepository.save(
+                    Diary.builder()
+                        .diaryId(diaryId)
+                        .memberUuid(memberUuid)
+                        .skinStatus(diaryWriteRequestDto.getSkinStatus())
+                        .thumbnailUrl(diaryWriteRequestDto.getThumbnailUrl())
+                        .cosmetics(diaryWriteRequestDto.getCosmetics())
+                        .isAlcohol(diaryWriteRequestDto.isAlcohol())
+                        .isExercise(diaryWriteRequestDto.isExercise())
+                        .sleepTime(diaryWriteRequestDto.getSleepTime())
+                        .memo(diaryWriteRequestDto.getMemo())
+                        .writeTime(writeTime)
+                        .build()
+                );
+
+                return BaseResponse.builder()
+                    .success(true)
+                    .errorCode(ErrorStatus.SUCCESS.getCode())
+                    .message("Diary saved.")
+                    .data(null)
+                    .build();
+            }
 
             return BaseResponse.builder()
-                .success(true)
-                .errorCode(ErrorStatus.SUCCESS.getCode())
-                .message("Diary saved.")
+                .success(false)
+                .errorCode(ErrorStatus.ALREADY_EXIST_DIARY.getCode())
+                .message("Diary not saved. Already existed.")
                 .data(null)
                 .build();
         } catch (Exception exception) {
