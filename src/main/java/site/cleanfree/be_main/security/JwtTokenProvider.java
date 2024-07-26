@@ -33,7 +33,6 @@ public class JwtTokenProvider {
             if (token.contains("Bearer ")) {
                 token = token.substring(7).trim();
             }
-            log.info("jwt: {}", token);
             return extractClaim(token, Claims::getSubject);
         } catch (Exception e) {
             log.info("Error parsing JWT: {}", e);
