@@ -16,4 +16,8 @@ public class GetDiaryListDto {
     private String dayDifference;
     private String writeTime;
     private SkinStatus skinStatus;
+
+    public void setDayDifference(String dayDifference) {
+        this.dayDifference = dayDifference;
+    }
 }
