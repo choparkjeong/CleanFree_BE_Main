@@ -13,13 +13,10 @@ public class TimeConvertor {
         return time.toLocalDate();
     }
 
-    public static LocalDateTime utcToKst(LocalDateTime utcTime) {
+    public static LocalDateTime utcStringToKst(String utcString) {
+        LocalDateTime utcTime = ZonedDateTime.parse(utcString).toLocalDateTime();
         return utcTime.atZone(ZoneId.of("UTC"))
             .withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
-    }
-
-    public static LocalDate utcDateTimeToKstDate(LocalDateTime utcTime) {
-        return dateTimeToDate(utcToKst(utcTime));
     }
 
     public static String convertWriteTime(String writeTime) {
