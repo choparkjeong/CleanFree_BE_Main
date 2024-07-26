@@ -1,6 +1,6 @@
 package site.cleanfree.be_main.common.exception;
 
-import org.springframework.http.HttpStatus;
+import io.jsonwebtoken.io.DecodingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,5 +29,24 @@ public class GlobalExceptionHandler {
                 .message("Invalid request body")
                 .data(null)
                 .build());
+    }
+
+    @ExceptionHandler(io.jsonwebtoken.io.DecodingException.class)
+    public ResponseEntity<BaseResponse<?>> handleDecodingException(DecodingException ex) {
+        if (ex.getMessage().contains("Illegal base64url")) {
+            return ResponseEntity.ok(BaseResponse.builder()
+                .success(false)
+                .errorCode(ErrorStatus.TOKEN_DECODING_ERROR.getCode())
+                .message(ex.getMessage())
+                .data(null)
+                .build());
+        }
+
+        return ResponseEntity.ok(BaseResponse.builder()
+            .success(false)
+            .errorCode(ErrorStatus.TOKEN_PARSING_ERROR.getCode())
+            .message(ex.getMessage())
+            .data(null)
+            .build());
     }
 }

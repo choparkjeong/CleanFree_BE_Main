@@ -13,7 +13,9 @@ public enum ErrorStatus {
     NOT_EXISTED_ERROR(1004),
     INCORRECT_SKIN_STATUS(1005),
     DATA_UPDATE_ERROR(1006),
-    BAD_DATA(1007)
+    BAD_DATA(1007),
+    TOKEN_DECODING_ERROR(1008),
+    TOKEN_PARSING_ERROR(1009),
     ;
 
     private final int code;
