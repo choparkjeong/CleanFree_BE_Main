@@ -70,6 +70,7 @@ public class DiaryController {
     public ResponseEntity<BaseResponse<DiaryResponseDto>> getRecentDiary(
         @RequestHeader String Authorization
     ) {
+        log.info("Authorization: {}", Authorization);
         return ResponseEntity.ok(diaryService.getRecentDiaryById(Authorization));
     }
 }
