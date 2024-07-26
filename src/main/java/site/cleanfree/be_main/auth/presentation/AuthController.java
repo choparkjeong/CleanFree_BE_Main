@@ -36,10 +36,10 @@ public class AuthController {
     @GetMapping("/test")
     @Operation(summary = "로그인 테스트 API", description = "로그인 테스트 API")
     public ResponseEntity<BaseResponse<String>> test(
-            @RequestHeader String Authorization
+            @RequestHeader String token
     ) {
-        log.info("Authorization >>> {}", Authorization);
+        log.info("token >>> {}", token);
         return ResponseEntity.ok()
-                .body(BaseResponse.successResponse("테스트 성공", jwtTokenProvider.getUuid(Authorization)));
+                .body(BaseResponse.successResponse("테스트 성공", jwtTokenProvider.getUuid(token)));
     }
 }
