@@ -35,7 +35,7 @@ public class JwtTokenProvider {
             }
             return extractClaim(token, Claims::getSubject);
         } catch (Exception e) {
-            log.info("Error parsing JWT: {}", e);
+            log.info("Error parsing JWT: {}, error message: {}", token, e.getMessage());
             return null;
         }
     }
