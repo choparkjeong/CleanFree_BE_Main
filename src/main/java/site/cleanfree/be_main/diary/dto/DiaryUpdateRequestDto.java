@@ -1,5 +1,6 @@
 package site.cleanfree.be_main.diary.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -22,5 +23,5 @@ public class DiaryUpdateRequestDto {
     private String sleepTime;
     private String memo;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime writeTime;
+    private LocalDate writeTime;
 }

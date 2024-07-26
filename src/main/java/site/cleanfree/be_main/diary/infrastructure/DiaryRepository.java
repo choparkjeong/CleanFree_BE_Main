@@ -1,5 +1,6 @@
 package site.cleanfree.be_main.diary.infrastructure;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -13,4 +14,6 @@ public interface DiaryRepository extends MongoRepository<Diary, String> {
     List<GetDiaryListDto> findAllByMemberUuidOrderByWriteTimeDesc(String uuid);
 
     Optional<Diary> findTopByMemberUuidOrderByWriteTimeDesc(String memberUuid);
+
+    Optional<Diary> findDiaryByMemberUuidAndWriteTime(String memberUuid, LocalDate writeTime);
 }
