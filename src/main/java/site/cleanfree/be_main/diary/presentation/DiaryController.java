@@ -45,6 +45,7 @@ public class DiaryController {
         @RequestHeader String Authorization,
         @RequestBody DiaryWriteRequestDto diaryWriteRequestDto
     ) {
+        log.info("Authorization: {}", Authorization);
         return ResponseEntity.ok(diaryService.writeDiary(Authorization, diaryWriteRequestDto));
     }
 
@@ -70,7 +71,6 @@ public class DiaryController {
     public ResponseEntity<BaseResponse<DiaryResponseDto>> getRecentDiary(
         @RequestHeader String Authorization
     ) {
-        log.info("Authorization: {}", Authorization);
         return ResponseEntity.ok(diaryService.getRecentDiaryById(Authorization));
     }
 }
