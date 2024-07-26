@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import site.cleanfree.be_main.auth.application.AuthService;
 import site.cleanfree.be_main.auth.dto.MemberSnsLoginRequestDto;
 import site.cleanfree.be_main.auth.dto.TokenResponseDto;
-import site.cleanfree.be_main.auth.infrastructure.SnsInfoRepository;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.security.JwtTokenProvider;
 
@@ -25,24 +24,22 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = "로그인 API")
-    public ResponseEntity<BaseResponse> login(
+    public ResponseEntity<BaseResponse<Object>> login(
             @RequestBody MemberSnsLoginRequestDto memberSnsLoginRequestDto) {
         TokenResponseDto tokenResponseDto = authService.snsLogin(memberSnsLoginRequestDto);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, tokenResponseDto.getAccessToken())
-                .body(BaseResponse.successResponse());
+                .body(BaseResponse.successResponse("SignIn Success.", null));
     }
 
     @GetMapping("/test")
     @Operation(summary = "로그인 테스트 API", description = "로그인 테스트 API")
-    public ResponseEntity<BaseResponse> test(
+    public ResponseEntity<BaseResponse<String>> test(
             @RequestHeader String token
     ) {
         log.info("token >>> {}", token);
         return ResponseEntity.ok()
-                .body(BaseResponse.builder()
-                        .data("uuid >>> " + jwtTokenProvider.getUuid(token))
-                        .build());
+                .body(BaseResponse.successResponse("테스트 성공", jwtTokenProvider.getUuid(token)));
     }
 }

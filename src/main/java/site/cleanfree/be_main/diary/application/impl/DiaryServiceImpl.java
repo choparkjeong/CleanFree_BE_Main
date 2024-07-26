@@ -13,8 +13,16 @@ import site.cleanfree.be_main.diary.domain.Diary;
 import site.cleanfree.be_main.diary.dto.DiaryUpdateRequestDto;
 import site.cleanfree.be_main.diary.dto.DiaryWriteRequestDto;
 import site.cleanfree.be_main.diary.dto.DiaryResponseDto;
+import site.cleanfree.be_main.diary.dto.GetDiaryListDto;
 import site.cleanfree.be_main.diary.infrastructure.DiaryRepository;
 import site.cleanfree.be_main.security.JwtTokenProvider;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -149,5 +157,58 @@ public class DiaryServiceImpl implements DiaryService {
                 .writeTime(diary.getWriteTime())
                 .build())
             .build();
+    }
+
+    @Override
+    public BaseResponse<List<GetDiaryListDto>> getDiaryList(String token) {
+        String uuid = jwtTokenProvider.getUuid(token);
+
+        List<GetDiaryListDto> getDiaryListDtoList = diaryRepository.findAllByMemberUuidOrderByWriteTime(uuid);
+
+        // 해당 리스트 들고와서 하나씩 처리
+        for(GetDiaryListDto getDiaryListDto : getDiaryListDtoList) {
+            String dayDifference = getDayDifference(getDiaryListDto.getWriteTime());
+            getDiaryListDto.setDayDifference(dayDifference);
+        }
+
+        return BaseResponse.successResponse(
+                "Find diary List success", getDiaryListDtoList);
+    }
+
+    // dayDifference 생성 메서드
+    private String getDayDifference(String writeTime) {
+        // DB에서 받아온 시간 형식에 맞춰서 DateTimeFormatter 생성
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss 'UTC' yyyy", Locale.ENGLISH);
+        LocalDateTime writeDateTime = LocalDateTime.parse(writeTime, formatter);
+        log.info("writeDateTime >>> {}", writeDateTime.toString());
+
+        // 현재 시간 가져오기 (KST)
+        LocalDateTime nowKST = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        log.info("nowKST >>> {}", nowKST.toString());
+
+        // writeTime과 현재 시간의 차이 계산
+        long daysBetween = ChronoUnit.DAYS.between(writeDateTime, nowKST);
+        long monthsBetween = ChronoUnit.MONTHS.between(writeDateTime, nowKST);
+        long yearsBetween = ChronoUnit.YEARS.between(writeDateTime, nowKST);
+        log.info("yearsBetween >>> {}, monthsBetween >>> {}, daysBetween >>> {}",
+                yearsBetween, monthsBetween, daysBetween);
+
+        // 1년 이상된 경우 처리
+        if(yearsBetween > 0) {
+            return String.format("%d년 전", yearsBetween);
+        }
+
+        // 1개월 이상인 경우
+        if(monthsBetween > 0) {
+            return String.format("%d개월 전", monthsBetween);
+        }
+
+        // 1개월 미만인 경우
+        if(daysBetween > 0) {
+            return String.format("%d일 전", daysBetween);
+        }
+
+        // 오늘인 경우
+        return "오늘";
     }
 }
