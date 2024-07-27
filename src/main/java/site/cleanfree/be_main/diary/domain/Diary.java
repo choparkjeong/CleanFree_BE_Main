@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import site.cleanfree.be_main.common.MongoBaseTimeEntity;
 import site.cleanfree.be_main.diary.state.SkinStatus;
@@ -20,6 +21,7 @@ public class Diary extends MongoBaseTimeEntity {
 
     @Id
     private String id;
+    @Indexed(unique = true)
     private String diaryId;
     private String memberUuid;
     private SkinStatus skinStatus;
