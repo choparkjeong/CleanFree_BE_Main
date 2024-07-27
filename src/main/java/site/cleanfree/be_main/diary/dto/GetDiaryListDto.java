@@ -17,6 +17,10 @@ public class GetDiaryListDto {
     private String writeTime;
     private SkinStatus skinStatus;
 
+    public void setThumbnailUrl(String defaultThumbnailUrl) {
+        this.thumbnailUrl = defaultThumbnailUrl;
+    }
+
     public void setDayDifference(String dayDifference) {
         this.dayDifference = dayDifference;
     }
