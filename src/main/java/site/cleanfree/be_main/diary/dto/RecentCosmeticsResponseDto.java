@@ -11,6 +11,7 @@ import lombok.Setter;
 @Builder
 public class RecentCosmeticsResponseDto {
 
+    private String thumbnailUrl;
     private List<String> cosmetics;
     private LocalDate writeTime;
 }

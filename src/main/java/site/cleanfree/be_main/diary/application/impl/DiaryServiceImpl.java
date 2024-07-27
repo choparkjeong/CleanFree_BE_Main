@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.TimeConvertor;
@@ -34,6 +35,8 @@ import static site.cleanfree.be_main.common.TimeConvertor.convertWriteTime;
 @Slf4j
 public class DiaryServiceImpl implements DiaryService {
 
+    @Value("${defaultThumbnailUrl}")
+    private String defaultThumbnailUrl;
     private final JwtTokenProvider jwtTokenProvider;
     private final DiaryRepository diaryRepository;
 
@@ -247,6 +250,7 @@ public class DiaryServiceImpl implements DiaryService {
                 .errorCode(ErrorStatus.SUCCESS.getCode())
                 .message("Not exist diary")
                 .data(RecentCosmeticsResponseDto.builder()
+                    .thumbnailUrl(defaultThumbnailUrl)
                     .cosmetics(new ArrayList<>())
                     .build())
                 .build();
@@ -257,6 +261,7 @@ public class DiaryServiceImpl implements DiaryService {
             .errorCode(ErrorStatus.SUCCESS.getCode())
             .message("Find Recent diary success")
             .data(RecentCosmeticsResponseDto.builder()
+                .thumbnailUrl(defaultThumbnailUrl)
                 .cosmetics(diary.getCosmetics())
                 .writeTime(diary.getWriteTime())
                 .build())
