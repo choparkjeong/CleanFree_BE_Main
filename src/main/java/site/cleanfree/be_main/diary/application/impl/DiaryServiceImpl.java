@@ -1,6 +1,7 @@
 package site.cleanfree.be_main.diary.application.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -245,7 +246,9 @@ public class DiaryServiceImpl implements DiaryService {
                 .success(true)
                 .errorCode(ErrorStatus.SUCCESS.getCode())
                 .message("Not exist diary")
-                .data(null)
+                .data(RecentCosmeticsResponseDto.builder()
+                    .cosmetics(new ArrayList<>())
+                    .build())
                 .build();
         }
         Diary diary = diaryOpt.get();
