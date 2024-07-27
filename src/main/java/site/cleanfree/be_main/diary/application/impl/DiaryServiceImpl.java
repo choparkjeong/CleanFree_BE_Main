@@ -193,6 +193,11 @@ public class DiaryServiceImpl implements DiaryService {
             getDiaryListDto.setDayDifference(dayDifference);
             // 반환 시, writeTime 형식 변환
             getDiaryListDto.setWriteTime(convertWriteTime(getDiaryListDto.getWriteTime()));
+
+            String thumbnailUrl = getDiaryListDto.getThumbnailUrl();
+            if (thumbnailUrl == null || thumbnailUrl.isEmpty()) {
+                getDiaryListDto.setThumbnailUrl(defaultThumbnailUrl);
+            }
         }
 
         return BaseResponse.successResponse(
@@ -250,7 +255,6 @@ public class DiaryServiceImpl implements DiaryService {
                 .errorCode(ErrorStatus.SUCCESS.getCode())
                 .message("Not exist diary")
                 .data(RecentCosmeticsResponseDto.builder()
-                    .thumbnailUrl(defaultThumbnailUrl)
                     .cosmetics(new ArrayList<>())
                     .build())
                 .build();
@@ -261,7 +265,6 @@ public class DiaryServiceImpl implements DiaryService {
             .errorCode(ErrorStatus.SUCCESS.getCode())
             .message("Find Recent diary success")
             .data(RecentCosmeticsResponseDto.builder()
-                .thumbnailUrl(defaultThumbnailUrl)
                 .cosmetics(diary.getCosmetics())
                 .writeTime(diary.getWriteTime())
                 .build())
