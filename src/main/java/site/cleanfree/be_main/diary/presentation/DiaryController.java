@@ -68,7 +68,7 @@ public class DiaryController {
     }
 
     @GetMapping("/recent")
-    @Operation(summary = "최근 일지 조회 API", description = "최근 일지를 조회합니다. 없으면 null, 빈리스트로 응답합니다.")
+    @Operation(summary = "최근 화장품 조회 API", description = "최근 화장품을 조회합니다. 없으면 null, 빈리스트로 응답합니다.")
     public ResponseEntity<BaseResponse<RecentCosmeticsResponseDto>> getRecentDiary(
         @RequestHeader String Authorization
     ) {
