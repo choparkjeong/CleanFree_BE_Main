@@ -15,6 +15,7 @@ import site.cleanfree.be_main.diary.dto.DiaryUpdateRequestDto;
 import site.cleanfree.be_main.diary.dto.DiaryWriteRequestDto;
 import site.cleanfree.be_main.diary.dto.DiaryResponseDto;
 import site.cleanfree.be_main.diary.dto.GetDiaryListDto;
+import site.cleanfree.be_main.diary.dto.RecentCosmeticsResponseDto;
 import site.cleanfree.be_main.diary.infrastructure.DiaryRepository;
 import site.cleanfree.be_main.security.JwtTokenProvider;
 
@@ -235,12 +236,12 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public BaseResponse<DiaryResponseDto> getRecentDiaryById(String token) {
+    public BaseResponse<RecentCosmeticsResponseDto> getRecentDiaryById(String token) {
         String memberUuid = getMemberUuid(token);
         Optional<Diary> diaryOpt = diaryRepository.findTopByMemberUuidOrderByWriteTimeDesc(memberUuid);
 
         if (diaryOpt.isEmpty()) {
-            return BaseResponse.<DiaryResponseDto>builder()
+            return BaseResponse.<RecentCosmeticsResponseDto>builder()
                 .success(true)
                 .errorCode(ErrorStatus.SUCCESS.getCode())
                 .message("Not exist diary")
@@ -248,19 +249,12 @@ public class DiaryServiceImpl implements DiaryService {
                 .build();
         }
         Diary diary = diaryOpt.get();
-        return BaseResponse.<DiaryResponseDto>builder()
+        return BaseResponse.<RecentCosmeticsResponseDto>builder()
             .success(true)
             .errorCode(ErrorStatus.SUCCESS.getCode())
             .message("Find Recent diary success")
-            .data(DiaryResponseDto.builder()
-                .diaryId(diary.getDiaryId())
-                .skinStatus(diary.getSkinStatus())
-                .thumbnailUrl(diary.getThumbnailUrl())
+            .data(RecentCosmeticsResponseDto.builder()
                 .cosmetics(diary.getCosmetics())
-                .isAlcohol(diary.isAlcohol())
-                .isExercise(diary.isExercise())
-                .sleepTime(diary.getSleepTime())
-                .memo(diary.getMemo())
                 .writeTime(diary.getWriteTime())
                 .build())
             .build();

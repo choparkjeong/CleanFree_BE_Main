@@ -23,6 +23,7 @@ import site.cleanfree.be_main.diary.dto.DiaryWriteRequestDto;
 import site.cleanfree.be_main.diary.dto.GetDiaryListDto;
 
 import java.util.List;
+import site.cleanfree.be_main.diary.dto.RecentCosmeticsResponseDto;
 
 @RestController
 @Slf4j
@@ -68,7 +69,7 @@ public class DiaryController {
 
     @GetMapping("/recent")
     @Operation(summary = "최근 일지 조회 API", description = "최근 일지를 조회합니다. 없으면 null, 빈리스트로 응답합니다.")
-    public ResponseEntity<BaseResponse<DiaryResponseDto>> getRecentDiary(
+    public ResponseEntity<BaseResponse<RecentCosmeticsResponseDto>> getRecentDiary(
         @RequestHeader String Authorization
     ) {
         return ResponseEntity.ok(diaryService.getRecentDiaryById(Authorization));
