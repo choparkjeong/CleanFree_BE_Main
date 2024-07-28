@@ -33,7 +33,7 @@ import site.cleanfree.be_main.diary.dto.RecentCosmeticsResponseDto;
 public class DiaryController {
     private final DiaryService diaryService;
 
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<DiaryResponseDto>> getDiaryById(
         @RequestHeader String Authorization,
         @PathVariable(value = "id") String id
