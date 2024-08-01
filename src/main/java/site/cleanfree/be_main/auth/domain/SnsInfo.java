@@ -1,11 +1,14 @@
 package site.cleanfree.be_main.auth.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.cleanfree.be_main.auth.dto.MemberSnsLoginRequestDto;
 
 @Entity
 @Getter
@@ -16,7 +19,7 @@ public class SnsInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sns_info_id")
     private Long id;
-//    @Column(name = "sns_type", nullable = false)
+    //    @Column(name = "sns_type", nullable = false)
 //    private String snsType;
     @Column(name = "sns_id", nullable = false)
     private String snsId;
@@ -28,13 +31,5 @@ public class SnsInfo {
 //        this.snsType = snsType;
         this.snsId = snsId;
         this.uuid = uuid;
-    }
-
-    public static SnsInfo converter(MemberSnsLoginRequestDto memberSnsLoginRequestDto, String uuid) {
-        return SnsInfo.builder()
-//                .snsType(memberSnsLoginRequestDto.getSnsType())
-                .snsId(memberSnsLoginRequestDto.getSnsId())
-                .uuid(memberSnsLoginRequestDto.getUuid())
-                .build();
     }
 }

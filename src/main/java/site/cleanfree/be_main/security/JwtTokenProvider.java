@@ -33,10 +33,10 @@ public class JwtTokenProvider {
             if (token.contains("Bearer ")) {
                 token = token.substring(7).trim();
             }
-            log.info("token: {}", token);
+
             return extractClaim(token, Claims::getSubject);
         } catch (Exception e) {
-            log.info("Error parsing JWT: {}, error message: {}", token, e.getMessage());
+            log.info("Error parsing JWT: {}", e.getMessage());
             return null;
         }
     }
@@ -65,7 +65,7 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(Map<String, Object> extractClaims, UserDetails userDetails) {
-        log.info("generateToken {}", userDetails);
+        log.info("generate token");
         Map<String, Object> modifiableExtractClaims = new HashMap<>(extractClaims);
         modifiableExtractClaims.put("TokenType", "access");
         return Jwts.builder()

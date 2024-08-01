@@ -17,6 +17,7 @@ public enum ErrorStatus {
     TOKEN_DECODING_ERROR(1008),
     TOKEN_PARSING_ERROR(1009),
     ALREADY_EXIST_DIARY(1010),
+    NOT_EXISTED_MEMBER(1011),
     ;
 
     private final int code;
