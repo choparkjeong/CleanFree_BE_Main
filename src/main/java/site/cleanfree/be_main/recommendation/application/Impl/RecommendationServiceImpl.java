@@ -30,7 +30,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             return BaseResponse.builder()
                 .success(false)
                 .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
-                .message("question not exist")
+                .message("request question not exist")
                 .data(null)
                 .build();
         }
@@ -40,6 +40,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .resultId(resultId)
                 .memberUuid(memberUuid)
                 .question(questionVo.getQuestion())
+                .isAnalyze(false)
                 .build());
             log.info("question saved");
             return BaseResponse.builder()
@@ -84,6 +85,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .cosmetics(recommendationResult.getCosmetics())
                     .ingredients(recommendationResult.getIngredients())
                     .references(recommendationResult.getReferences())
+                    .isAnalyze(recommendationResult.getIsAnalyze())
                     .build()
             )
             .build();

@@ -18,4 +18,13 @@ public class ResultResponseDto {
     private List<Cosmetic> cosmetics;
     private List<String> ingredients;
     private Reference references;
+    private boolean isAnalyze;
+
+    public boolean getIsAnalyze() {
+        return this.isAnalyze;
+    }
+
+    public void setIsAnalyze(boolean isAnalyze) {
+        this.isAnalyze = isAnalyze;
+    }
 }
