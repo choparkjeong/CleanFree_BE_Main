@@ -25,6 +25,11 @@ public class Recommendation extends MongoBaseTimeEntity {
     private List<Cosmetic> cosmetics;
     private List<String> ingredients;
     private Reference references;
+    private boolean isAnalyze;
+
+    public boolean getIsAnalyze() {
+        return this.isAnalyze;
+    }
 
     @Builder
     public Recommendation(
@@ -34,7 +39,8 @@ public class Recommendation extends MongoBaseTimeEntity {
         String question,
         List<Cosmetic> cosmetics,
         List<String> ingredients,
-        Reference references
+        Reference references,
+        boolean isAnalyze
     ) {
         this.id = id;
         this.resultId = resultId;
@@ -43,5 +49,6 @@ public class Recommendation extends MongoBaseTimeEntity {
         this.cosmetics = cosmetics;
         this.ingredients = ingredients;
         this.references = references;
+        this.isAnalyze = isAnalyze;
     }
 }

@@ -70,7 +70,7 @@ public class DiaryServiceImpl implements DiaryService {
 
                 return BaseResponse.builder()
                     .success(true)
-                    .errorCode(ErrorStatus.SUCCESS.getCode())
+                    .errorCode(null)
                     .message("Diary saved.")
                     .data(null)
                     .build();
@@ -129,7 +129,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         return BaseResponse.builder()
             .success(true)
-            .errorCode(ErrorStatus.SUCCESS.getCode())
+            .errorCode(null)
             .message("Diary update success.")
             .data(null)
             .build();
@@ -157,7 +157,7 @@ public class DiaryServiceImpl implements DiaryService {
         if (diary == null) {
             return BaseResponse.<DiaryResponseDto>builder()
                 .success(true)
-                .errorCode(ErrorStatus.SUCCESS.getCode())
+                .errorCode(null)
                 .message("Not exist diary")
                 .data(null)
                 .build();
@@ -165,7 +165,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         return BaseResponse.<DiaryResponseDto>builder()
             .success(true)
-            .errorCode(ErrorStatus.SUCCESS.getCode())
+            .errorCode(null)
             .message("Find diary success")
             .data(DiaryResponseDto.builder()
                 .diaryId(diaryId)
@@ -252,7 +252,7 @@ public class DiaryServiceImpl implements DiaryService {
         if (diaryOpt.isEmpty()) {
             return BaseResponse.<RecentCosmeticsResponseDto>builder()
                 .success(true)
-                .errorCode(ErrorStatus.SUCCESS.getCode())
+                .errorCode(null)
                 .message("Not exist diary")
                 .data(RecentCosmeticsResponseDto.builder()
                     .cosmetics(new ArrayList<>())
@@ -262,7 +262,7 @@ public class DiaryServiceImpl implements DiaryService {
         Diary diary = diaryOpt.get();
         return BaseResponse.<RecentCosmeticsResponseDto>builder()
             .success(true)
-            .errorCode(ErrorStatus.SUCCESS.getCode())
+            .errorCode(null)
             .message("Find Recent diary success")
             .data(RecentCosmeticsResponseDto.builder()
                 .cosmetics(diary.getCosmetics())

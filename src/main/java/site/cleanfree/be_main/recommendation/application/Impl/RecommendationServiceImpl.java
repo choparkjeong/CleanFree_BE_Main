@@ -1,5 +1,10 @@
 package site.cleanfree.be_main.recommendation.application.Impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -8,6 +13,7 @@ import site.cleanfree.be_main.common.UuidProvider;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
 import site.cleanfree.be_main.recommendation.application.RecommendationService;
 import site.cleanfree.be_main.recommendation.domain.Recommendation;
+import site.cleanfree.be_main.recommendation.dto.ResultListResponseDto;
 import site.cleanfree.be_main.recommendation.dto.ResultResponseDto;
 import site.cleanfree.be_main.recommendation.infrastructure.RecommendationRepository;
 import site.cleanfree.be_main.recommendation.vo.QuestionVo;
@@ -26,11 +32,11 @@ public class RecommendationServiceImpl implements RecommendationService {
         String memberUuid = jwtTokenProvider.getUuid(authorization);
         String question = questionVo.getQuestion();
 
-        if (question.isEmpty() || question == null) {
+        if (question == null || question.isEmpty()) {
             return BaseResponse.builder()
                 .success(false)
                 .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
-                .message("question not exist")
+                .message("request question not exist")
                 .data(null)
                 .build();
         }
@@ -40,11 +46,12 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .resultId(resultId)
                 .memberUuid(memberUuid)
                 .question(questionVo.getQuestion())
+                .isAnalyze(false)
                 .build());
             log.info("question saved");
             return BaseResponse.builder()
                 .success(true)
-                .errorCode(ErrorStatus.SUCCESS.getCode())
+                .errorCode(null)
                 .message("question save success")
                 .data(null)
                 .build();
@@ -74,7 +81,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         log.info("resultId exist");
         return BaseResponse.<ResultResponseDto>builder()
             .success(true)
-            .errorCode(ErrorStatus.SUCCESS.getCode())
+            .errorCode(null)
             .message("recommendation result find success")
             .data(
                 ResultResponseDto.builder()
@@ -84,6 +91,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .cosmetics(recommendationResult.getCosmetics())
                     .ingredients(recommendationResult.getIngredients())
                     .references(recommendationResult.getReferences())
+                    .isAnalyze(recommendationResult.getIsAnalyze())
                     .build()
             )
             .build();
@@ -91,5 +99,55 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     private Recommendation getRecommendationByResultId(String resultId) {
         return recommendationRepository.getRecommendationByResultId(resultId).orElse(null);
+    }
+
+    public BaseResponse<List<ResultListResponseDto>> getResults(String authorization) {
+        String memberUuid = jwtTokenProvider.getUuid(authorization);
+        List<Recommendation> recommendations = recommendationRepository.getAllByMemberUuid(
+            memberUuid);
+
+        List<ResultListResponseDto> resultListResponseDtos = recommendations.stream().map(
+            recommendation -> ResultListResponseDto.builder()
+                .resultId(recommendation.getResultId())
+                .dayDifference(getDayDifference(recommendation.getCreatedAt()))
+                .isAnalyze(recommendation.getIsAnalyze())
+                .build()).toList();
+
+        return BaseResponse.<List<ResultListResponseDto>>builder()
+            .success(true)
+            .errorCode(null)
+            .message("result list find success")
+            .data(resultListResponseDtos)
+            .build();
+    }
+
+    private String getDayDifference(LocalDateTime createdAt) {
+        log.info("createdAt >>> {}", createdAt.toString());
+
+        LocalDateTime kstDateTime = createdAt.atZone(ZoneId.of("UTC"))
+            .withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+
+        // 날짜 부분만 가져오기
+        LocalDate createdDate = createdAt.toLocalDate();
+
+        // 현재 시간 가져오기 (KST)
+        LocalDate nowKST = LocalDate.now(ZoneId.of("Asia/Seoul"));
+
+        // writeTime과 현재 시간의 차이 계산
+        long daysBetween = ChronoUnit.DAYS.between(createdDate, nowKST);
+        long monthsBetween = ChronoUnit.MONTHS.between(createdDate, nowKST);
+        long yearsBetween = ChronoUnit.YEARS.between(createdDate, nowKST);
+        log.info("years between >>> {}, months between >>> {}, days between >>> {}",
+            yearsBetween, monthsBetween, daysBetween);
+
+        if (yearsBetween > 0) {
+            return String.format("%d년 전", yearsBetween);
+        } else if (monthsBetween > 0) {
+            return String.format("%d개월 전", monthsBetween);
+        } else if (daysBetween > 0) {
+            return String.format("%d일 전", daysBetween);
+        }
+
+        return "오늘";
     }
 }
