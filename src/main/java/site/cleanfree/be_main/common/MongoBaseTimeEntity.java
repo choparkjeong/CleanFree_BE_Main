@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 public abstract class MongoBaseTimeEntity {
 
     @CreatedDate
-    private LocalDateTime createdAt; //todo: mongodb에 적용 안되는 문제 해결하기
+    private LocalDateTime createdAt; //todo: update시 mongodb에 적용 안되는 문제 해결하기
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
