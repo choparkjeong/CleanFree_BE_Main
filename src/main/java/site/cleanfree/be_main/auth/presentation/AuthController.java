@@ -28,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    @Operation(summary = "로그인 API", description = "로그인 API")
+    @Operation(summary = "로그인 API", description = "로그인에 성공하면 토큰을 반환합니다. 회원이 아닌 경우 HTTP METHOD 201에 토큰을 빈 문자열로 반환합니다.")
     public ResponseEntity<BaseResponse<Object>> login(
         @RequestBody MemberSnsLoginRequestDto memberSnsLoginRequestDto) {
         TokenResponseDto tokenResponseDto = authService.snsLogin(memberSnsLoginRequestDto);
