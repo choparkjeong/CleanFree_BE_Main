@@ -67,17 +67,17 @@ jobs:
       - name: Build and tag image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         run: |
-          docker buildx build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./Dockerfile .
+          docker buildx build -t $ECR_REPOSITORY/main-service:$IMAGE_TAG -f ./Dockerfile .
 
       - name: Push Docker image to Amazon ECR
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'  # docker push after merge main branch
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         run: |
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REPOSITORY/main-service:$IMAGE_TAG
 
   run-docker-image-on-ec2:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -99,7 +99,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          sudo docker pull $ECR_REPOSITORY/main-service:$IMAGE_TAG
 
       - name: Check if container is running
         id: check-container
@@ -119,7 +119,7 @@ jobs:
       - name: Run new docker container
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: sudo docker run -d --name cleanfree-main-service -p 9002:9002 --net cleanfree-network $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        run: sudo docker run -d --name cleanfree-main-service -p 9002:9002 --net cleanfree-network $ECR_REPOSITORY/main-service:$IMAGE_TAG
 
       - name: Delete old docker image
         run: sudo docker system prune -f
