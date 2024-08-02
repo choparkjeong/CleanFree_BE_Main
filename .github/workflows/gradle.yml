@@ -70,7 +70,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}-$(date +%Y%m%d%H%M%S)
         run: |
           IMAGE_TAG="${IMAGE_TAG}"
-          docker buildx build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --load .
+          docker buildx build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --load -f Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
   run-docker-image-on-ec2:
