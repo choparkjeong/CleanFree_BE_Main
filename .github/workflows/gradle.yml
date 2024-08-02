@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   AWS_REGION: ${{ secrets.CLEANFREE_AWS_REGION }}
   ECR_REPOSITORY: ${{ secrets.CLEANFREE_ECR_REPOSITORY }}
@@ -13,8 +17,6 @@ env:
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - uses: actions/checkout@v4
