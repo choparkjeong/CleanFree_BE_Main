@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.recommendation.application.RecommendationService;
 import site.cleanfree.be_main.recommendation.dto.ResultListResponseDto;
+import site.cleanfree.be_main.recommendation.dto.ResultSimpleResponseDto;
 import site.cleanfree.be_main.recommendation.dto.ResultResponseDto;
 import site.cleanfree.be_main.recommendation.vo.QuestionVo;
 
@@ -44,7 +45,7 @@ public class RecommendationController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<BaseResponse<List<ResultListResponseDto>>> getSearchResults(
+    public ResponseEntity<BaseResponse<ResultListResponseDto>> getSearchResults(
         @RequestHeader String Authorization
     ) {
         return ResponseEntity.ok(recommendationService.getResults(Authorization));
