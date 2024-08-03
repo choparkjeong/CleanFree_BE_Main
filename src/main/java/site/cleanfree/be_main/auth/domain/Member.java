@@ -31,18 +31,18 @@ public class Member extends JpaBaseTimeEntity {
     @Column(name = "uuid", nullable = false, length = 10)
     private String uuid;
     @Column(name = "age", nullable = false)
-    private String age;
+    private String birthDate;
     @Column(name = "day_access_count")
     private Integer dayAccessCount;
 
     @Builder
-    public Member(Long id, String email, String name, String gender, String uuid, String age, Integer dayAccessCount) {
+    public Member(Long id, String email, String name, String gender, String uuid, String birthDate, Integer dayAccessCount) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.gender = gender;
         this.uuid = uuid;
-        this.age = age;
+        this.birthDate = birthDate;
         this.dayAccessCount = dayAccessCount;
     }
 
@@ -51,7 +51,7 @@ public class Member extends JpaBaseTimeEntity {
             .email(memberSignupRequestVo.getEmail())
             .name(memberSignupRequestVo.getName())
             .gender(memberSignupRequestVo.getGender())
-            .age(memberSignupRequestVo.getAge())
+            .birthDate(memberSignupRequestVo.getBirthDate())
             .uuid(memberUuid)
             .dayAccessCount(0)
             .build();
