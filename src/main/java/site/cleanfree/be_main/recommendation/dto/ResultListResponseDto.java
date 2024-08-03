@@ -1,5 +1,6 @@
 package site.cleanfree.be_main.recommendation.dto;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,15 +10,7 @@ import lombok.Setter;
 @Builder
 public class ResultListResponseDto {
 
-    private String resultId;
-    private String dayDifference;
-    private boolean isAnalyze;
+    private List<ResultSimpleResponseDto> results;
+    private Integer dayAccessCount;
 
-    public boolean getIsAnalyze() {
-        return this.isAnalyze;
-    }
-
-    public void setIsAnalyze(boolean isAnalyze) {
-        this.isAnalyze = isAnalyze;
-    }
 }

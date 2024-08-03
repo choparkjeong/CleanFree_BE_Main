@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import site.cleanfree.be_main.auth.vo.MemberSignupRequestVo;
 import site.cleanfree.be_main.common.JpaBaseTimeEntity;
 
@@ -29,17 +30,20 @@ public class Member extends JpaBaseTimeEntity {
     private String gender;
     @Column(name = "uuid", nullable = false, length = 10)
     private String uuid;
-    @Column(name = "age", nullable = false, length = 3)
-    private String age;
+    @Column(name = "age", nullable = false)
+    private Integer age;
+    @Column(name = "day_access_count")
+    private Integer dayAccessCount;
 
     @Builder
-    public Member(Long id, String email, String name, String gender, String uuid, String age) {
+    public Member(Long id, String email, String name, String gender, String uuid, Integer age, Integer dayAccessCount) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.gender = gender;
         this.uuid = uuid;
         this.age = age;
+        this.dayAccessCount = dayAccessCount;
     }
 
     public static Member converter(MemberSignupRequestVo memberSignupRequestVo, String memberUuid) {
@@ -49,6 +53,7 @@ public class Member extends JpaBaseTimeEntity {
             .gender(memberSignupRequestVo.getGender())
             .age(memberSignupRequestVo.getAge())
             .uuid(memberUuid)
+            .dayAccessCount(0)
             .build();
     }
 }
