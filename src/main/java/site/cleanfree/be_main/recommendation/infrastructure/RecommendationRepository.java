@@ -10,4 +10,6 @@ public interface RecommendationRepository extends MongoRepository<Recommendation
     Optional<Recommendation> getRecommendationByResultId(String resultId);
 
     List<Recommendation> getAllByMemberUuid(String memberUuid);
+
+    Optional<Recommendation> findTopByMemberUuidOrderByCreatedAtDesc(String memberUuid);
 }
