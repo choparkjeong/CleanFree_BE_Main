@@ -30,17 +30,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public TokenResponseDto snsLogin(MemberSnsLoginRequestDto memberSnsLoginRequestDto) {
         SnsInfo snsInfo = getSnsInfo(memberSnsLoginRequestDto.getSnsId());
 
         if (snsInfo == null) {
             log.info("First time login user.");
-
             return TokenResponseDto.builder()
                 .accessToken(null)
                 .build();
-
         }
 
         String uuid = snsInfo.getUuid();
@@ -50,38 +48,32 @@ public class AuthServiceImpl implements AuthService {
             .build();
     }
 
+    @Override
+    @Transactional
     public TokenResponseDto signup(MemberSignupRequestVo memberSignupRequestVo) {
         SnsInfo snsInfo = getSnsInfo(memberSignupRequestVo.getSnsId());
 
-        if (snsInfo != null) {
-            String token = createToken(snsInfo.getUuid());
+        if (snsInfo == null) {
+            String memberUuid = UuidProvider.generateMemberUuid();
+            try {
+                snsInfoRepository.save(SnsInfo.builder()
+                    .snsId(memberSignupRequestVo.getSnsId())
+                    .uuid(memberUuid)
+                    .build());
+                memberRepository.save(Member.converter(memberSignupRequestVo, memberUuid));
+            } catch (Exception e) {
+                log.info("error: {}", e.getMessage());
+                return TokenResponseDto.builder()
+                    .accessToken(null)
+                    .build();
+            }
+            String token = createToken(memberUuid);
             return TokenResponseDto.builder()
                 .accessToken(token)
                 .build();
         }
 
-        String memberUuid = UuidProvider.generateMemberUuid();
-
-        try {
-            snsInfoRepository.save(SnsInfo.builder()
-                .snsId(memberSignupRequestVo.getSnsId())
-                .uuid(memberUuid)
-                .build());
-        } catch (Exception e) {
-            return TokenResponseDto.builder()
-                .accessToken(null)
-                .build();
-        }
-
-        try {
-            memberRepository.save(Member.converter(memberSignupRequestVo, memberUuid));
-        } catch (Exception e) {
-            return TokenResponseDto.builder()
-                .accessToken(null)
-                .build();
-        }
-
-        String token = createToken(memberUuid);
+        String token = createToken(snsInfo.getUuid());
         return TokenResponseDto.builder()
             .accessToken(token)
             .build();
