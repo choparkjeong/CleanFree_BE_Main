@@ -180,7 +180,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .name(member.getName())
                     .gender(member.getGender())
                     .uuid(member.getUuid())
-                    .age(member.getAge())
+                    .birthDate(member.getBirthDate())
                     .dayAccessCount(todayAccessCount + 1)
                     .build());
                 return todayAccessCount;
