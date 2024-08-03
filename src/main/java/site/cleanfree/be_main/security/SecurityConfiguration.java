@@ -28,7 +28,7 @@ public class SecurityConfiguration {
         return request -> {
             var cors = new org.springframework.web.cors.CorsConfiguration();
             cors.setAllowedOriginPatterns(List.of("http://localhost:3000", "https://cleanfree.site",
-                "https://www.cleanfree.site", "https://clean-free-fe.vercel.app"));
+                "https://www.cleanfree.site", "https://clean-free-fe.vercel.app", "https://cleanfree.store"));
             cors.setAllowedMethods(
                 List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
             cors.setAllowedHeaders(List.of("*"));
