@@ -31,12 +31,12 @@ public class Member extends JpaBaseTimeEntity {
     @Column(name = "uuid", nullable = false, length = 10)
     private String uuid;
     @Column(name = "age", nullable = false)
-    private Integer age;
+    private String age;
     @Column(name = "day_access_count")
     private Integer dayAccessCount;
 
     @Builder
-    public Member(Long id, String email, String name, String gender, String uuid, Integer age, Integer dayAccessCount) {
+    public Member(Long id, String email, String name, String gender, String uuid, String age, Integer dayAccessCount) {
         this.id = id;
         this.email = email;
         this.name = name;

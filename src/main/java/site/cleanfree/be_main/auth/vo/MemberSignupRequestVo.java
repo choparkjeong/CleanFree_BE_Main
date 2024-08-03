@@ -8,6 +8,6 @@ public class MemberSignupRequestVo {
     private String snsId;
     private String name;
     private String gender;
-    private Integer age;
+    private String age;
     private String email;
 }
