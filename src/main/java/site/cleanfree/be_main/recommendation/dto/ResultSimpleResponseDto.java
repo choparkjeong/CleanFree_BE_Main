@@ -10,6 +10,7 @@ import lombok.Setter;
 public class ResultSimpleResponseDto {
 
     private String resultId;
+    private String question;
     private String dayDifference;
     private boolean isAnalyze;
 
