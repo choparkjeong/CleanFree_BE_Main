@@ -30,7 +30,7 @@ public class Member extends JpaBaseTimeEntity {
     private String gender;
     @Column(name = "uuid", nullable = false, length = 10)
     private String uuid;
-    @Column(name = "birthDate", nullable = false)
+    @Column(name = "birth_date", nullable = false)
     private String birthDate;
     @Column(name = "day_access_count")
     private Integer dayAccessCount;
