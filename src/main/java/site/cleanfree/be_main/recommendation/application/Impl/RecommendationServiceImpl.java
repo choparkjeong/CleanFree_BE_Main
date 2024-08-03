@@ -114,6 +114,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         List<ResultSimpleResponseDto> resultSimpleResponseDtos = recommendations.stream().map(
             recommendation -> ResultSimpleResponseDto.builder()
                 .resultId(recommendation.getResultId())
+                .question(recommendation.getQuestion())
                 .dayDifference(getDayDifference(recommendation.getCreatedAt()))
                 .isAnalyze(recommendation.getIsAnalyze())
                 .build()).toList();
