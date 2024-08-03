@@ -13,6 +13,7 @@ import site.cleanfree.be_main.auth.dto.TokenResponseDto;
 import site.cleanfree.be_main.auth.infrastructure.MemberRepository;
 import site.cleanfree.be_main.auth.infrastructure.SnsInfoRepository;
 import site.cleanfree.be_main.auth.vo.MemberSignupRequestVo;
+import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.UuidProvider;
 import site.cleanfree.be_main.security.JwtTokenProvider;
 
@@ -83,5 +84,26 @@ public class AuthServiceImpl implements AuthService {
         UserDetails userDetails = User.withUsername(uuid).password(uuid)
             .roles("USER").build();
         return jwtTokenProvider.generateToken(userDetails);
+    }
+
+    @Override
+    public BaseResponse<Boolean> isMember(MemberSnsLoginRequestDto memberSnsLoginRequestDto) {
+        SnsInfo snsInfo = getSnsInfo(memberSnsLoginRequestDto.getSnsId());
+
+        if (snsInfo == null) {
+            return BaseResponse.<Boolean>builder()
+                .success(true)
+                .errorCode(null)
+                .message("not exist member")
+                .data(false)
+                .build();
+        }
+
+        return BaseResponse.<Boolean>builder()
+            .success(true)
+            .errorCode(null)
+            .message("exist member")
+            .data(true)
+            .build();
     }
 }

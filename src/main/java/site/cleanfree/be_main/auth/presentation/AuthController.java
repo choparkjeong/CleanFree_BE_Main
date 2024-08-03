@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,5 +72,13 @@ public class AuthController {
         return ResponseEntity.ok()
             .header(HttpHeaders.AUTHORIZATION, token)
             .body(BaseResponse.successResponse("signup success.", null));
+    }
+
+    @PostMapping("/is-member")
+    @Operation(summary = "회원 여부 조회 API", description = "회원이면 true, 아니면 false를 반환합니다.")
+    public ResponseEntity<BaseResponse<Boolean>> getIsMember(
+        @RequestBody MemberSnsLoginRequestDto memberSnsLoginRequestDto
+    ) {
+        return ResponseEntity.ok(authService.isMember(memberSnsLoginRequestDto));
     }
 }
