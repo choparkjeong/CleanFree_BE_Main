@@ -9,11 +9,13 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.cleanfree.be_main.auth.domain.Member;
 import site.cleanfree.be_main.auth.infrastructure.MemberRepository;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.UuidProvider;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
+import site.cleanfree.be_main.recommendation.status.SearchLimit;
 import site.cleanfree.be_main.recommendation.application.RecommendationService;
 import site.cleanfree.be_main.recommendation.domain.Recommendation;
 import site.cleanfree.be_main.recommendation.dto.ResultListResponseDto;
@@ -32,10 +34,23 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Override
+    @Transactional
     public BaseResponse<?> search(String authorization, QuestionVo questionVo) {
         String resultId = UuidProvider.generateRecommendationResultId();
         String memberUuid = jwtTokenProvider.getUuid(authorization);
         String question = questionVo.getQuestion();
+
+        Optional<Member> memberOpt = memberRepository.findByUuid(memberUuid);
+
+        if (memberOpt.isEmpty()) {
+            return BaseResponse.builder()
+                .success(false)
+                .errorCode(ErrorStatus.NOT_EXISTED_MEMBER.getCode())
+                .message("not existed member")
+                .data(null)
+                .build();
+        }
 
         if (question == null || question.isEmpty()) {
             return BaseResponse.builder()
@@ -46,7 +61,19 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .build();
         }
 
+        Member member = memberOpt.get();
+
+        if (isOverSearchCount(member)) {
+            return BaseResponse.builder()
+                .success(false)
+                .errorCode(ErrorStatus.SEARCH_LIMIT_REACHED.getCode())
+                .message("question has reached the daily limit.")
+                .data(member.getSearchCount())
+                .build();
+        }
+
         try {
+            memberRepository.save(Member.converter(member, member.getSearchCount() + 1));
             recommendationRepository.save(Recommendation.builder()
                 .resultId(resultId)
                 .memberUuid(memberUuid)
@@ -61,7 +88,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .data(null)
                 .build();
         } catch (Exception e) {
-            log.info("question save fail because of {}", e.getMessage());
+            log.info("question save fail because {}", e.getMessage());
             return BaseResponse.builder()
                 .success(false)
                 .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
@@ -69,6 +96,36 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .data(null)
                 .build();
         }
+    }
+
+    private boolean isOverSearchCount(Member member) {
+        Recommendation recentSearch = getRecentSearch(member.getUuid());
+
+        if (recentSearch == null || member.getSearchCount() == null) {
+            memberRepository.save(Member.converter(member, 0));
+            return false;
+        }
+
+        LocalDateTime recentSearchCreatedAt = recentSearch.getCreatedAt();
+        LocalDate kstRecentCreatedAtDate = recentSearchCreatedAt.atZone(ZoneId.of("UTC"))
+            .withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDate();
+
+        LocalDate nowKstDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
+
+        if (kstRecentCreatedAtDate.isBefore(nowKstDate)) {
+            memberRepository.save(Member.converter(member, 0));
+            return false;
+        }
+
+        if (member.getSearchCount() >= SearchLimit.ONE_PER_DAY.getCount()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private Recommendation getRecentSearch(String memberUuid) {
+        return recommendationRepository.findTopByMemberUuidOrderByCreatedAtDesc(memberUuid).orElse(null);
     }
 
     public BaseResponse<ResultResponseDto> getResult(String authorization, String resultId) {

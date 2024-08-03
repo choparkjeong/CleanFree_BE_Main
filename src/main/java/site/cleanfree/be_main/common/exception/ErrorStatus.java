@@ -18,6 +18,7 @@ public enum ErrorStatus {
     TOKEN_PARSING_ERROR(1009),
     ALREADY_EXIST_DIARY(1010),
     NOT_EXISTED_MEMBER(1011),
+    SEARCH_LIMIT_REACHED(1012),
     ;
 
     private final int code;
