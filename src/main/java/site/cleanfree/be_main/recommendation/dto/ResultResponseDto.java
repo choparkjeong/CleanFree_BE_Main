@@ -15,6 +15,7 @@ public class ResultResponseDto {
     private String resultId;
     private String memberUuid;
     private String question;
+    private String answer;
     private List<Cosmetic> cosmetics;
     private List<String> ingredients;
     private Reference references;

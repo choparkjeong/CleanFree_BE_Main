@@ -22,6 +22,7 @@ public class Recommendation extends MongoBaseTimeEntity {
     private String resultId;
     private String memberUuid;
     private String question;
+    private String answer;
     private List<Cosmetic> cosmetics;
     private List<String> ingredients;
     private Reference references;
@@ -37,6 +38,7 @@ public class Recommendation extends MongoBaseTimeEntity {
         String resultId,
         String memberUuid,
         String question,
+        String answer,
         List<Cosmetic> cosmetics,
         List<String> ingredients,
         Reference references,
@@ -46,6 +48,7 @@ public class Recommendation extends MongoBaseTimeEntity {
         this.resultId = resultId;
         this.memberUuid = memberUuid;
         this.question = question;
+        this.answer = answer;
         this.cosmetics = cosmetics;
         this.ingredients = ingredients;
         this.references = references;

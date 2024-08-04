@@ -144,6 +144,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .resultId(recommendationResult.getResultId())
                     .memberUuid(recommendationResult.getMemberUuid())
                     .question(recommendationResult.getQuestion())
+                    .answer(recommendationResult.getAnswer())
                     .cosmetics(recommendationResult.getCosmetics())
                     .ingredients(recommendationResult.getIngredients())
                     .references(recommendationResult.getReferences())
