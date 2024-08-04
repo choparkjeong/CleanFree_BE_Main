@@ -1,7 +1,6 @@
 package site.cleanfree.be_main.recommendation.presentation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.recommendation.application.RecommendationService;
 import site.cleanfree.be_main.recommendation.dto.ResultListResponseDto;
-import site.cleanfree.be_main.recommendation.dto.ResultSimpleResponseDto;
 import site.cleanfree.be_main.recommendation.dto.ResultResponseDto;
 import site.cleanfree.be_main.recommendation.vo.QuestionVo;
 
@@ -49,5 +47,12 @@ public class RecommendationController {
         @RequestHeader String Authorization
     ) {
         return ResponseEntity.ok(recommendationService.getResults(Authorization));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<BaseResponse<Integer>> getSearchCount(
+        @RequestHeader String Authorization
+    ) {
+        return ResponseEntity.ok(recommendationService.getSearchCount(Authorization));
     }
 }

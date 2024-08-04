@@ -15,4 +15,5 @@ public interface RecommendationService {
 
     BaseResponse<ResultListResponseDto> getResults(String authorization);
 
+    BaseResponse<Integer> getSearchCount(String authorization);
 }
