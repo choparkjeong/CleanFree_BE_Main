@@ -68,7 +68,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .success(false)
                 .errorCode(ErrorStatus.SEARCH_LIMIT_REACHED.getCode())
                 .message("question has reached the daily limit.")
-                .data(member.getSearchCount())
+                .data(null)
                 .build();
         }
 
@@ -101,8 +101,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     private boolean isOverSearchCount(Member member) {
         Recommendation recentSearch = getRecentSearch(member.getUuid());
 
-        if (recentSearch == null || member.getSearchCount() == null) {
-            memberRepository.save(Member.converter(member, 0));
+        if (recentSearch == null) {
             return false;
         }
 
@@ -113,21 +112,16 @@ public class RecommendationServiceImpl implements RecommendationService {
         LocalDate nowKstDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
 
         if (kstRecentCreatedAtDate.isBefore(nowKstDate)) {
-            memberRepository.save(Member.converter(member, 0));
             return false;
-        }
-
-        if (member.getSearchCount() >= SearchLimit.ONE_PER_DAY.getCount()) {
-            return true;
-        }
-
-        return false;
+        } else
+            return member.getSearchCount() >= SearchLimit.ONE_PER_DAY.getCount();
     }
 
     private Recommendation getRecentSearch(String memberUuid) {
         return recommendationRepository.findTopByMemberUuidOrderByCreatedAtDesc(memberUuid).orElse(null);
     }
 
+    @Override
     public BaseResponse<ResultResponseDto> getResult(String authorization, String resultId) {
         Recommendation recommendationResult = getRecommendationByResultId(resultId);
 
@@ -163,6 +157,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         return recommendationRepository.getRecommendationByResultId(resultId).orElse(null);
     }
 
+    @Override
     public BaseResponse<ResultListResponseDto> getResults(String authorization) {
         String memberUuid = jwtTokenProvider.getUuid(authorization);
         List<Recommendation> recommendations = recommendationRepository.getAllByMemberUuid(
@@ -257,9 +252,30 @@ public class RecommendationServiceImpl implements RecommendationService {
         LocalDate kstToday = LocalDateTime.now().atZone(ZoneId.of("UTC"))
             .withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDate();
 
-        if (kstDate.equals(kstToday)) {
-            return true;
+        return kstDate.equals(kstToday);
+    }
+
+    @Override
+    public BaseResponse<Integer> getSearchCount(String authorization) {
+        String memberUuid = jwtTokenProvider.getUuid(authorization);
+        Optional<Member> memberOpt = memberRepository.findByUuid(memberUuid);
+
+        if (memberOpt.isEmpty()) {
+            return BaseResponse.<Integer>builder()
+                .success(false)
+                .errorCode(ErrorStatus.NOT_EXISTED_MEMBER.getCode())
+                .message("member not exist")
+                .data(null)
+                .build();
         }
-        return false;
+
+        Integer searchCount = memberOpt.get().getSearchCount();
+
+        return BaseResponse.<Integer>builder()
+            .success(true)
+            .errorCode(null)
+            .message("find search count limit success")
+            .data(searchCount)
+            .build();
     }
 }
