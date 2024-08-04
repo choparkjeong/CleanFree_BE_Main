@@ -112,6 +112,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         LocalDate nowKstDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
 
         if (kstRecentCreatedAtDate.isBefore(nowKstDate)) {
+            memberRepository.save(Member.converter(member, 0));
             return false;
         } else
             return member.getSearchCount() >= SearchLimit.ONE_PER_DAY.getCount();
