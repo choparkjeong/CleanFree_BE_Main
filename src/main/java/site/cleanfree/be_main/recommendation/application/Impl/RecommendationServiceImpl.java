@@ -148,6 +148,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .answer(recommendationResult.getAnswer())
                     .cosmetics(recommendationResult.getCosmetics())
                     .ingredients(recommendationResult.getIngredients())
+                    .solutions(recommendationResult.getSolutions())
                     .references(recommendationResult.getReferences())
                     .isAnalyze(recommendationResult.getIsAnalyze())
                     .build()

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import site.cleanfree.be_main.recommendation.domain.Cosmetic;
 import site.cleanfree.be_main.recommendation.domain.Reference;
+import site.cleanfree.be_main.recommendation.domain.Solution;
 
 @Getter
 @Setter
@@ -18,6 +19,7 @@ public class ResultResponseDto {
     private String answer;
     private List<Cosmetic> cosmetics;
     private List<String> ingredients;
+    private List<Solution> solutions;
     private Reference references;
     private boolean isAnalyze;
 
