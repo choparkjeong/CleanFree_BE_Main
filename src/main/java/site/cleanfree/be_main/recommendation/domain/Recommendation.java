@@ -57,4 +57,9 @@ public class Recommendation extends MongoBaseTimeEntity {
         this.references = references;
         this.isAnalyze = isAnalyze;
     }
+
+    public void setGptResponse(List<String> ingredients, List<Solution> solutions) {
+        this.ingredients = ingredients;
+        this.solutions = solutions;
+    }
 }

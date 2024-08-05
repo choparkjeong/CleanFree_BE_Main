@@ -82,7 +82,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         try {
             memberRepository.save(Member.converter(member, member.getSearchCount() + 1));
 
-            recommendationRepository.save(Recommendation.builder()
+            Recommendation newRecommendation = recommendationRepository.save(Recommendation.builder()
                 .resultId(resultId)
                 .memberUuid(memberUuid)
                 .question(questionVo.getQuestion())
@@ -94,17 +94,9 @@ public class RecommendationServiceImpl implements RecommendationService {
 
             // Recommendation 객체 저장을 비동기적으로 실행
             gptResponseMono.flatMap(gptResponseDto -> {
-                    Recommendation recommendation = Recommendation.builder()
-                        .resultId(resultId)
-                        .memberUuid(memberUuid)
-                        .question(questionVo.getQuestion())
-                        .references(new Reference())
-                        .ingredients(gptResponseDto.getIngredients())
-                        .solutions(gptResponseDto.getSolutions())
-                        .isAnalyze(false)
-                        .build();
+                    newRecommendation.setGptResponse(gptResponseDto.getIngredients(), gptResponseDto.getSolutions());
 
-                    return reactiveRecommendationRepository.save(recommendation);
+                    return reactiveRecommendationRepository.save(newRecommendation);
                 })
                 .doOnSuccess(savedRecommendation -> {
                     log.info("Recommendation saved successfully");
