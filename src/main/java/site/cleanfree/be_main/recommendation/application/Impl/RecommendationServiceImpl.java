@@ -15,6 +15,7 @@ import site.cleanfree.be_main.auth.infrastructure.MemberRepository;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.UuidProvider;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
+import site.cleanfree.be_main.recommendation.domain.Reference;
 import site.cleanfree.be_main.recommendation.status.SearchLimit;
 import site.cleanfree.be_main.recommendation.application.RecommendationService;
 import site.cleanfree.be_main.recommendation.domain.Recommendation;
@@ -78,6 +79,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .resultId(resultId)
                 .memberUuid(memberUuid)
                 .question(questionVo.getQuestion())
+                .references(new Reference())
                 .isAnalyze(false)
                 .build());
             log.info("question saved");
@@ -136,6 +138,19 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .build();
         }
         log.info("resultId exist");
+
+//        Reference originReference = recommendationResult.getReferences();
+//
+//        Reference reference = new Reference();
+//
+//        if (originReference.getYoutube().isEmpty()) {
+//            reference. = "https://youtube.com/channel/UCw2DFGtxYINwpL-haXRXoag?si=aUkS_vhJ_cGkvLVQ";
+//        }
+
+//        if (reference.getBlog().isEmpty()) {
+//
+//        }
+
         return BaseResponse.<ResultResponseDto>builder()
             .success(true)
             .errorCode(null)

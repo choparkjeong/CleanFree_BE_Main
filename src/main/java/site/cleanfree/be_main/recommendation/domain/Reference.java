@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 public class Reference {
 
-    private List<String> youtube;
-    private List<String> blog;
-    private List<String> etc;
+    private List<String> youtube = List.of("https://youtube.com/channel/UCw2DFGtxYINwpL-haXRXoag?si=aUkS_vhJ_cGkvLVQ");
+    private List<String> blog = List.of("https://blog.naver.com/zerotoone_1");
+    private List<String> etc = List.of("https://www.instagram.com/cleanfree_/");
 }
