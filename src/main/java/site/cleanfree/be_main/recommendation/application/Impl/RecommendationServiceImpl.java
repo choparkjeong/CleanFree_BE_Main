@@ -10,12 +10,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 import site.cleanfree.be_main.auth.domain.Member;
 import site.cleanfree.be_main.auth.infrastructure.MemberRepository;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.UuidProvider;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
 import site.cleanfree.be_main.recommendation.domain.Reference;
+import site.cleanfree.be_main.recommendation.infrastructure.ReactiveRecommendationRepository;
+import site.cleanfree.be_main.recommendation.openai.GptResponseDto;
+import site.cleanfree.be_main.recommendation.openai.OpenAi;
 import site.cleanfree.be_main.recommendation.status.SearchLimit;
 import site.cleanfree.be_main.recommendation.application.RecommendationService;
 import site.cleanfree.be_main.recommendation.domain.Recommendation;
@@ -34,6 +38,8 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final RecommendationRepository recommendationRepository;
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ReactiveRecommendationRepository reactiveRecommendationRepository;
+    private final OpenAi openAi;
 
     @Override
     @Transactional
@@ -75,14 +81,30 @@ public class RecommendationServiceImpl implements RecommendationService {
 
         try {
             memberRepository.save(Member.converter(member, member.getSearchCount() + 1));
-            recommendationRepository.save(Recommendation.builder()
+
+            Recommendation newRecommendation = recommendationRepository.save(Recommendation.builder()
                 .resultId(resultId)
                 .memberUuid(memberUuid)
                 .question(questionVo.getQuestion())
                 .references(new Reference())
                 .isAnalyze(false)
                 .build());
-            log.info("question saved");
+
+            Mono<GptResponseDto> gptResponseMono = openAi.getGptResponse(question);
+
+            // Recommendation 객체 저장을 비동기적으로 실행
+            gptResponseMono.flatMap(gptResponseDto -> {
+                    newRecommendation.setGptResponse(gptResponseDto.getIngredients(), gptResponseDto.getSolutions());
+
+                    return reactiveRecommendationRepository.save(newRecommendation);
+                })
+                .doOnSuccess(savedRecommendation -> {
+                    log.info("Recommendation saved successfully");
+                })
+                .doOnError(e -> {
+                    log.error("Recommendation save failed because {}", e.getMessage());
+                })
+                .subscribe(); // 저장 작업을 비동기적으로 실행
             return BaseResponse.builder()
                 .success(true)
                 .errorCode(null)
@@ -138,18 +160,6 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .build();
         }
         log.info("resultId exist");
-
-//        Reference originReference = recommendationResult.getReferences();
-//
-//        Reference reference = new Reference();
-//
-//        if (originReference.getYoutube().isEmpty()) {
-//            reference. = "https://youtube.com/channel/UCw2DFGtxYINwpL-haXRXoag?si=aUkS_vhJ_cGkvLVQ";
-//        }
-
-//        if (reference.getBlog().isEmpty()) {
-//
-//        }
 
         return BaseResponse.<ResultResponseDto>builder()
             .success(true)
