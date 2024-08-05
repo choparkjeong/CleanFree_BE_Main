@@ -82,6 +82,14 @@ public class RecommendationServiceImpl implements RecommendationService {
         try {
             memberRepository.save(Member.converter(member, member.getSearchCount() + 1));
 
+            recommendationRepository.save(Recommendation.builder()
+                .resultId(resultId)
+                .memberUuid(memberUuid)
+                .question(questionVo.getQuestion())
+                .references(new Reference())
+                .isAnalyze(false)
+                .build());
+
             Mono<GptResponseDto> gptResponseMono = openAi.getGptResponse(question);
 
             // Recommendation 객체 저장을 비동기적으로 실행
