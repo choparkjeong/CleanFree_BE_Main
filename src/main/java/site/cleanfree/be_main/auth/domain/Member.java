@@ -36,10 +36,12 @@ public class Member extends JpaBaseTimeEntity {
     private Integer dayAccessCount;
     @Column(name = "search_count", nullable = false)
     private int searchCount;
+    @Column(name = "total_search_count", nullable = false)
+    private int totalSearchCount;
 
     @Builder
     public Member(Long id, String email, String name, String gender, String uuid, String birthDate,
-        Integer dayAccessCount, int searchCount) {
+        Integer dayAccessCount, int searchCount, int totalSearchCount) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -48,6 +50,7 @@ public class Member extends JpaBaseTimeEntity {
         this.birthDate = birthDate;
         this.dayAccessCount = dayAccessCount;
         this.searchCount = searchCount;
+        this.totalSearchCount = totalSearchCount;
     }
 
     public static Member converter(MemberSignupRequestVo memberSignupRequestVo, String memberUuid) {
@@ -58,6 +61,7 @@ public class Member extends JpaBaseTimeEntity {
             .birthDate(memberSignupRequestVo.getBirthDate())
             .uuid(memberUuid)
             .dayAccessCount(0)
+            .totalSearchCount(0)
             .build();
     }
 
@@ -71,6 +75,7 @@ public class Member extends JpaBaseTimeEntity {
             .birthDate(member.getBirthDate())
             .dayAccessCount(member.getDayAccessCount())
             .searchCount(newSearchCount)
+            .totalSearchCount(member.getTotalSearchCount() + newSearchCount)
             .build();
     }
 }
