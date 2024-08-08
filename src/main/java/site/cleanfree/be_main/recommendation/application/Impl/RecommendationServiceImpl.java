@@ -70,14 +70,14 @@ public class RecommendationServiceImpl implements RecommendationService {
 
         Member member = memberOpt.get();
 
-        if (isOverSearchCount(member)) {
-            return BaseResponse.builder()
-                .success(false)
-                .errorCode(ErrorStatus.SEARCH_LIMIT_REACHED.getCode())
-                .message("question has reached the daily limit.")
-                .data(null)
-                .build();
-        }
+//        if (isOverSearchCount(member)) {
+//            return BaseResponse.builder()
+//                .success(false)
+//                .errorCode(ErrorStatus.SEARCH_LIMIT_REACHED.getCode())
+//                .message("question has reached the daily limit.")
+//                .data(null)
+//                .build();
+//        }
 
         try {
             memberRepository.save(Member.converter(member, member.getSearchCount() + 1));
