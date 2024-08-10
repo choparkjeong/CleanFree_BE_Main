@@ -1,21 +1,25 @@
+# Build stage
 FROM bellsoft/liberica-openjdk-alpine:17 as build
 WORKDIR /workspace/app
 
 # Copy the built JAR file
-COPY build/libs/*.jar .
+COPY build/libs/*.jar app.jar
 
 # Unpack the built application
-RUN mkdir -p target/extracted
-RUN java -Djarmode=layertools -jar *.jar extract --destination target/extracted
+RUN java -Djarmode=layertools -jar app.jar extract --destination target/extracted
 
-FROM bellsoft/liberica-openjdk-alpine:17
-VOLUME /tmp
-ARG EXTRACTED=/workspace/app/target/extracted
+# Runtime stage
+FROM bellsoft/liberica-openjre-alpine:17
+WORKDIR /app
 
 # Copy over the unpacked application
-COPY --from=build ${EXTRACTED}/dependencies/ ./
-COPY --from=build ${EXTRACTED}/spring-boot-loader/ ./
-COPY --from=build ${EXTRACTED}/snapshot-dependencies/ ./
-COPY --from=build ${EXTRACTED}/application/ ./
+COPY --from=build /workspace/app/target/extracted/dependencies/ ./
+COPY --from=build /workspace/app/target/extracted/spring-boot-loader/ ./
+COPY --from=build /workspace/app/target/extracted/snapshot-dependencies/ ./
+COPY --from=build /workspace/app/target/extracted/application/ ./
 
-ENTRYPOINT ["java","org.springframework.boot.loader.JarLauncher"]
+# Clean up unnecessary files and caches
+RUN rm -rf /tmp/* /var/cache/apk/*
+
+# Set the entry point
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
