@@ -28,7 +28,8 @@ public class SecurityConfiguration {
         return request -> {
             var cors = new org.springframework.web.cors.CorsConfiguration();
             cors.setAllowedOriginPatterns(List.of("http://localhost:3000", "https://cleanfree.site",
-                "https://www.cleanfree.site", "https://www.cleanfree.site/**", "https://clean-free-fe.vercel.app",
+                "https://www.cleanfree.site", "https://www.cleanfree.site/**",
+                "https://clean-free-fe.vercel.app",
                 "https://cleanfree.store", "http://cleanfree.store/**"));
             cors.setAllowedMethods(
                 List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
@@ -49,7 +50,8 @@ public class SecurityConfiguration {
                     // 허용 범위
                     .requestMatchers("https://cleanfree.store", "/api/v1/auth/login",
                         "/api/v1/auth/signup", "/api/v1/auth/is-member", "/swagger-ui/**",
-                        "/v3/api-docs/**", "/health-check", "/api/v1/cozyquick/**")
+                        "/v3/api-docs/**", "/health-check", "/api/v1/cozyquick/**",
+                        "/api/v1/createvalue/**", "/api/v1/consultant/search")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
