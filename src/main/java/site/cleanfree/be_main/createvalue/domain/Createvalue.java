@@ -1,6 +1,7 @@
 package site.cleanfree.be_main.createvalue.domain;
 
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +17,7 @@ public class Createvalue extends MongoBaseTimeEntity {
     private String searchId;
     private String search;
 
+    @Builder
     public Createvalue(String id, String searchId, String search) {
         this.id = id;
         this.searchId = searchId;
