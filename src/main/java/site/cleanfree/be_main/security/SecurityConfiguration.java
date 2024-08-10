@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                     // 허용 범위
                     .requestMatchers("https://cleanfree.store", "/api/v1/auth/login",
                         "/api/v1/auth/signup", "/api/v1/auth/is-member", "/swagger-ui/**",
-                        "/v3/api-docs/**", "/health-check", "/cozyquick/**")
+                        "/v3/api-docs/**", "/health-check", "/api/v1/cozyquick/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
