@@ -13,7 +13,7 @@ import site.cleanfree.be_main.cozyquick.application.CozyquickService;
 import site.cleanfree.be_main.cozyquick.vo.CozyquickSearchRequestVo;
 
 @RestController
-@RequestMapping("/cozyquick")
+@RequestMapping("/api/v1/cozyquick")
 @RequiredArgsConstructor
 @Tag(name = "cozyquick API", description = "해외 구매 대행 서비스 API")
 public class CozyquickController {
