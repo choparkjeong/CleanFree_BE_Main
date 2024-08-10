@@ -41,4 +41,8 @@ public class UuidProvider {
         }
         return sb.toString();
     }
+
+    public static String generateAnyId() {
+        return generateRecommendationResultId();
+    }
 }
