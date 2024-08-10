@@ -1,4 +1,4 @@
-package site.cleanfree.be_main.consultant;
+package site.cleanfree.be_main.cookingstation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,18 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 import site.cleanfree.be_main.common.BaseResponse;
 
 @RestController
-@RequestMapping("/api/v1/consultant")
+@RequestMapping("/api/v1/cookingstation")
 @RequiredArgsConstructor
-@Tag(name = "consultant API", description = "소상공인 컨설턴트 API")
-public class ConsultantController {
+@Tag(name = "cookingstation API", description = "집밥 배선생 API")
+public class CookingStationController {
 
-    private final ConsultantService consultantService;
+    private final CookingStationService cookingStationService;
 
     @PostMapping("/register")
     @Operation(summary = "사전 신청 API", description = "ip 주소를 기준으로 사전 신청을 저장합니다.")
     public ResponseEntity<BaseResponse<Object>> search(
-        @RequestBody ConsultantRegisterRequestVo consultantRegisterRequestVo
+        @RequestBody CookingStationRegisterRequestVo cookingStationRegisterRequestVo
     ) {
-        return ResponseEntity.ok(consultantService.register(consultantRegisterRequestVo));
+        return ResponseEntity.ok(cookingStationService.register(cookingStationRegisterRequestVo));
     }
+
 }
