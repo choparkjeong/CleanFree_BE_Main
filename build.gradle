@@ -64,6 +64,10 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 }
 
+tasks.named('bootBuildImage') {
+	builder = 'paketobuildpacks/builder-jammy-base:latest'
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
