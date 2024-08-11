@@ -3,9 +3,7 @@ package site.cleanfree.be_main.cookingstation;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import site.cleanfree.be_main.carrycabin.CarryCabinAccess;
 import site.cleanfree.be_main.common.BaseResponse;
-import site.cleanfree.be_main.common.accessip.IpSaveRequestVo;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
 
 @Service
@@ -15,11 +13,9 @@ public class CookingStationService {
     private final CookingStationRepository cookingStationRepository;
     private final CookingStationAccessRepository cookingStationAccessRepository;
 
-    public BaseResponse<Object> register(
-        CookingStationRegisterRequestVo cookingStationRegisterRequestVo) {
-        String ip = cookingStationRegisterRequestVo.getIp();
+    public BaseResponse<Object> register(String clientIp) {
         Optional<CookingStation> cookingStationOpt = cookingStationRepository.findCookingStationByIp(
-            ip);
+            clientIp);
 
         if (cookingStationOpt.isPresent()) {
             return BaseResponse.<Object>builder()
@@ -31,7 +27,7 @@ public class CookingStationService {
 
         try {
             cookingStationRepository.save(CookingStation.builder()
-                .ip(cookingStationRegisterRequestVo.getIp())
+                .ip(clientIp)
                 .build());
 
             return BaseResponse.<Object>builder()
@@ -48,9 +44,9 @@ public class CookingStationService {
         }
     }
 
-    public BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo) {
+    public BaseResponse<Object> access(String clientIp) {
         Optional<CookingStationAccess> cookingStationAccessOpt = cookingStationAccessRepository.findCookingStationAccessByIp(
-            ipSaveRequestVo.getIp());
+            clientIp);
 
         if (cookingStationAccessOpt.isPresent()) {
             return BaseResponse.builder()
@@ -62,7 +58,7 @@ public class CookingStationService {
         }
 
         cookingStationAccessRepository.save(CookingStationAccess.builder()
-            .ip(ipSaveRequestVo.getIp())
+            .ip(clientIp)
             .build());
 
         return BaseResponse.builder()

@@ -8,5 +8,5 @@ public interface CreatevalueService {
 
     BaseResponse<Object> search(CreatevalueSearchRequestVo createvalueSearchRequestVo);
 
-    BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo);
+    BaseResponse<Object> access(String clientIp);
 }

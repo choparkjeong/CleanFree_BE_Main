@@ -4,10 +4,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.cleanfree.be_main.common.BaseResponse;
-import site.cleanfree.be_main.common.accessip.IpSaveRequestVo;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
-import site.cleanfree.be_main.cookingstation.CookingStation;
-import site.cleanfree.be_main.createvalue.domain.CreatevalueAccess;
 
 @Service
 @RequiredArgsConstructor
@@ -16,9 +13,8 @@ public class CureSilverService {
     private final CureSilverRepository cureSilverRepository;
     private final CureSilverAccessRepository cureSilverAccessRepository;
 
-    public BaseResponse<Object> register(CureSilverRegisterRequestVo cureSilverRegisterRequestVo) {
-        String ip = cureSilverRegisterRequestVo.getIp();
-        Optional<CureSilver> cureSilverOpt = cureSilverRepository.findCureSilverByIp(ip);
+    public BaseResponse<Object> register(String clientIp) {
+        Optional<CureSilver> cureSilverOpt = cureSilverRepository.findCureSilverByIp(clientIp);
 
         if (cureSilverOpt.isPresent()) {
             return BaseResponse.<Object>builder()
@@ -30,7 +26,7 @@ public class CureSilverService {
 
         try {
             cureSilverRepository.save(CureSilver.builder()
-                .ip(cureSilverRegisterRequestVo.getIp())
+                .ip(clientIp)
                 .build());
 
             return BaseResponse.<Object>builder()
@@ -47,9 +43,9 @@ public class CureSilverService {
         }
     }
 
-    public BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo) {
+    public BaseResponse<Object> access(String clientIp) {
         Optional<CureSilverAccess> cureSilverAccessOpt = cureSilverAccessRepository.findCureSilverAccessByIp(
-            ipSaveRequestVo.getIp());
+            clientIp);
 
         if (cureSilverAccessOpt.isPresent()) {
             return BaseResponse.builder()
@@ -61,7 +57,7 @@ public class CureSilverService {
         }
 
         cureSilverAccessRepository.save(CureSilverAccess.builder()
-            .ip(ipSaveRequestVo.getIp())
+            .ip(clientIp)
             .build());
 
         return BaseResponse.builder()

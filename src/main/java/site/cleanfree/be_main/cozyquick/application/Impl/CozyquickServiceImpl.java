@@ -56,9 +56,9 @@ public class CozyquickServiceImpl implements CozyquickService {
     }
 
     @Override
-    public BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo) {
+    public BaseResponse<Object> access(String clientIp) {
         Optional<CozyquickAccess> cozyquickAccessOpt = cozyquickAccessRepository.findCozyquickAccessByIp(
-            ipSaveRequestVo.getIp());
+            clientIp);
 
         if (cozyquickAccessOpt.isPresent()) {
             return BaseResponse.builder()
@@ -70,7 +70,7 @@ public class CozyquickServiceImpl implements CozyquickService {
         }
 
         cozyquickAccessRepository.save(CozyquickAccess.builder()
-            .ip(ipSaveRequestVo.getIp())
+            .ip(clientIp)
             .build());
 
         return BaseResponse.builder()

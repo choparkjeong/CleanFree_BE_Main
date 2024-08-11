@@ -15,9 +15,8 @@ public class ConsultantService {
     private final ConsultantRepository consultantRepository;
     private final ConsultantAccessRepository consultantAccessRepository;
 
-    public BaseResponse<Object> register(ConsultantRegisterRequestVo consultantRegisterRequestVo) {
-        String ip = consultantRegisterRequestVo.getIp();
-        Optional<Consultant> consultantOpt = consultantRepository.findConsultantByIp(ip);
+    public BaseResponse<Object> register(String clientIp) {
+        Optional<Consultant> consultantOpt = consultantRepository.findConsultantByIp(clientIp);
 
         if (consultantOpt.isPresent()) {
             return BaseResponse.<Object>builder()
@@ -29,7 +28,7 @@ public class ConsultantService {
 
         try {
             consultantRepository.save(Consultant.builder()
-                .ip(consultantRegisterRequestVo.getIp())
+                .ip(clientIp)
                 .build());
 
             return BaseResponse.<Object>builder()
@@ -46,9 +45,9 @@ public class ConsultantService {
         }
     }
 
-    public BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo) {
+    public BaseResponse<Object> access(String clientIp) {
         Optional<ConsultantAccess> consultantAccessOpt = consultantAccessRepository.findConsultantAccessByIp(
-            ipSaveRequestVo.getIp());
+            clientIp);
 
         if (consultantAccessOpt.isPresent()) {
             return BaseResponse.builder()
@@ -60,7 +59,7 @@ public class ConsultantService {
         }
 
         consultantAccessRepository.save(ConsultantAccess.builder()
-            .ip(ipSaveRequestVo.getIp())
+            .ip(clientIp)
             .build());
 
         return BaseResponse.builder()

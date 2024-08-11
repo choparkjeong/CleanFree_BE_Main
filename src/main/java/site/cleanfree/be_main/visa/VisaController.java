@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.cleanfree.be_main.common.BaseResponse;
+import site.cleanfree.be_main.common.ClientIpAccessor;
 
 @Slf4j
 @RestController
@@ -23,17 +24,8 @@ public class VisaController {
         HttpServletRequest request,
         @RequestBody VisaRegisterRequestVo visaRegisterRequestVo
     ) {
-        String clientIp = request.getHeader("X-Forwarded-For");
-        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("Proxy-Client-IP");
-        }
-        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getRemoteAddr();
-        }
-        log.info("clientIp: {}", clientIp);
-        return ResponseEntity.ok(visaService.register(visaRegisterRequestVo));
+        String clientIp = ClientIpAccessor.getIp(request);
+
+        return ResponseEntity.ok(visaService.register(clientIp));
     }
 }

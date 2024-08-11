@@ -3,10 +3,8 @@ package site.cleanfree.be_main.createvalue.application.Impl;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import site.cleanfree.be_main.carrycabin.CarryCabinAccess;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.UuidProvider;
-import site.cleanfree.be_main.common.accessip.IpSaveRequestVo;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
 import site.cleanfree.be_main.createvalue.application.CreatevalueService;
 import site.cleanfree.be_main.createvalue.domain.Createvalue;
@@ -46,9 +44,9 @@ public class CreatevalueServiceImpl implements CreatevalueService {
         }
     }
 
-    public BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo) {
+    public BaseResponse<Object> access(String clientIp) {
         Optional<CreatevalueAccess> createvalueAccessOpt = createvalueAccessRepository.findCreatevalueAccessByIp(
-            ipSaveRequestVo.getIp());
+            clientIp);
 
         if (createvalueAccessOpt.isPresent()) {
             return BaseResponse.builder()
@@ -60,7 +58,7 @@ public class CreatevalueServiceImpl implements CreatevalueService {
         }
 
         createvalueAccessRepository.save(CreatevalueAccess.builder()
-            .ip(ipSaveRequestVo.getIp())
+            .ip(clientIp)
             .build());
 
         return BaseResponse.builder()

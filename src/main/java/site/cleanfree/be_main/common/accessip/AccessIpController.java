@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.cleanfree.be_main.carrycabin.CarryCabinService;
 import site.cleanfree.be_main.common.BaseResponse;
+import site.cleanfree.be_main.common.ClientIpAccessor;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
 import site.cleanfree.be_main.consultant.ConsultantService;
 import site.cleanfree.be_main.cookingstation.CookingStationService;
@@ -37,32 +38,18 @@ public class AccessIpController {
         HttpServletRequest request,
         @RequestBody IpSaveRequestVo ipSaveRequestVo
     ) {
-        String clientIp = request.getHeader("X-Forwarded-For");
-        log.info("clientIp: {}", clientIp);
-        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("Proxy-Client-IP");
-            log.info("clientIp: {}", clientIp);
-        }
-        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("WL-Proxy-Client-IP");
-            log.info("clientIp: {}", clientIp);
-        }
-        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getRemoteAddr();
-            log.info("clientIp: {}", clientIp);
-        }
-        log.info("clientIp: {}", clientIp);
+        String clientIp = ClientIpAccessor.getIp(request);
 
         String service = ipSaveRequestVo.getService();
         return switch (service) {
-            case "carrycabin" -> ResponseEntity.ok(carryCabinService.access(ipSaveRequestVo));
-            case "consultant" -> ResponseEntity.ok(consultantService.access(ipSaveRequestVo));
+            case "carrycabin" -> ResponseEntity.ok(carryCabinService.access(clientIp));
+            case "consultant" -> ResponseEntity.ok(consultantService.access(clientIp));
             case "cookingstation" ->
-                ResponseEntity.ok(cookingStationService.access(ipSaveRequestVo));
-            case "cozyquick" -> ResponseEntity.ok(cozyquickService.access(ipSaveRequestVo));
-            case "createvalue" -> ResponseEntity.ok(createvalueService.access(ipSaveRequestVo));
-            case "curesilver" -> ResponseEntity.ok(cureSilverService.access(ipSaveRequestVo));
-            case "clearvisa" -> ResponseEntity.ok(visaService.access(ipSaveRequestVo));
+                ResponseEntity.ok(cookingStationService.access(clientIp));
+            case "cozyquick" -> ResponseEntity.ok(cozyquickService.access(clientIp));
+            case "createvalue" -> ResponseEntity.ok(createvalueService.access(clientIp));
+            case "curesilver" -> ResponseEntity.ok(cureSilverService.access(clientIp));
+            case "clearvisa" -> ResponseEntity.ok(visaService.access(clientIp));
             default -> ResponseEntity.ok(BaseResponse.builder()
                 .success(false)
                 .errorCode(ErrorStatus.BAD_DATA.getCode())

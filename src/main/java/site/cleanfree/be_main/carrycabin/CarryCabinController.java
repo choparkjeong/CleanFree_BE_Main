@@ -2,6 +2,7 @@ package site.cleanfree.be_main.carrycabin;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.cleanfree.be_main.common.BaseResponse;
+import site.cleanfree.be_main.common.ClientIpAccessor;
 import site.cleanfree.be_main.cookingstation.CookingStationRegisterRequestVo;
 
 @RestController
@@ -22,9 +24,11 @@ public class CarryCabinController {
     @PostMapping("/register")
     @Operation(summary = "사전 신청 API", description = "ip 주소를 기준으로 사전 신청을 저장합니다.")
     public ResponseEntity<BaseResponse<Object>> search(
+        HttpServletRequest request,
         @RequestBody CarryCabinRegisterRequestVo carryCabinRegisterRequestVo
     ) {
-        return ResponseEntity.ok(carryCabinService.register(carryCabinRegisterRequestVo));
+        String clientIp = ClientIpAccessor.getIp(request);
+        return ResponseEntity.ok(carryCabinService.register(clientIp));
     }
 
 }

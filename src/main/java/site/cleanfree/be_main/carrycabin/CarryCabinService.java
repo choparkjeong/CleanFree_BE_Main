@@ -14,10 +14,9 @@ public class CarryCabinService {
     private final CarryCabinRepository carryCabinRepository;
     private final CarryCabinAccessRepository carryCabinAccessRepository;
 
-    public BaseResponse<Object> register(CarryCabinRegisterRequestVo carryCabinRegisterRequestVo) {
-        String ip = carryCabinRegisterRequestVo.getIp();
+    public BaseResponse<Object> register(String clientIp) {
         Optional<CarryCabin> carryCabinOpt = carryCabinRepository.findCarryCabinByIp(
-            ip);
+            clientIp);
 
         if (carryCabinOpt.isPresent()) {
             return BaseResponse.<Object>builder()
@@ -29,7 +28,7 @@ public class CarryCabinService {
 
         try {
             carryCabinRepository.save(CarryCabin.builder()
-                .ip(carryCabinRegisterRequestVo.getIp())
+                .ip(clientIp)
                 .build());
 
             return BaseResponse.<Object>builder()
@@ -46,9 +45,8 @@ public class CarryCabinService {
         }
     }
 
-    public BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo) {
-        Optional<CarryCabinAccess> carryCabinAccessOpt = carryCabinAccessRepository.findCarryCabinAccessByIp(
-            ipSaveRequestVo.getIp());
+    public BaseResponse<Object> access(String clientIp) {
+        Optional<CarryCabinAccess> carryCabinAccessOpt = carryCabinAccessRepository.findCarryCabinAccessByIp(clientIp);
 
         if (carryCabinAccessOpt.isPresent()) {
             return BaseResponse.builder()
@@ -60,7 +58,7 @@ public class CarryCabinService {
         }
 
         carryCabinAccessRepository.save(CarryCabinAccess.builder()
-            .ip(ipSaveRequestVo.getIp())
+            .ip(clientIp)
             .build());
 
         return BaseResponse.builder()

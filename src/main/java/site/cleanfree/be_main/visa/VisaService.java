@@ -14,9 +14,8 @@ public class VisaService {
     private final VisaRepository visaRepository;
     private final VisaAccessRepository visaAccessRepository;
 
-    public BaseResponse<Object> register(VisaRegisterRequestVo visaRegisterRequestVo) {
-        String ip = visaRegisterRequestVo.getIp();
-        Optional<Visa> visaOpt = visaRepository.findVisaByIp(ip);
+    public BaseResponse<Object> register(String clientIp) {
+        Optional<Visa> visaOpt = visaRepository.findVisaByIp(clientIp);
 
         if (visaOpt.isPresent()) {
             return BaseResponse.builder()
@@ -27,7 +26,7 @@ public class VisaService {
         }
 
         visaRepository.save(Visa.builder()
-            .ip(ip)
+            .ip(clientIp)
             .build());
 
         return BaseResponse.builder()
@@ -38,9 +37,8 @@ public class VisaService {
             .build();
     }
 
-    public BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo) {
-        String ip = ipSaveRequestVo.getIp();
-        Optional<VisaAccess> visaAccessOpt = visaAccessRepository.findVisaAccessByIp(ip);
+    public BaseResponse<Object> access(String clientIp) {
+        Optional<VisaAccess> visaAccessOpt = visaAccessRepository.findVisaAccessByIp(clientIp);
 
         if (visaAccessOpt.isPresent()) {
             return BaseResponse.builder()
@@ -51,7 +49,7 @@ public class VisaService {
         }
 
         visaAccessRepository.save(VisaAccess.builder()
-            .ip(ip)
+            .ip(clientIp)
             .build());
 
         return BaseResponse.builder()

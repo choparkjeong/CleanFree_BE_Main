@@ -6,7 +6,7 @@ import site.cleanfree.be_main.cozyquick.vo.CozyquickSearchRequestVo;
 
 public interface CozyquickService {
 
-    BaseResponse<Object> search(CozyquickSearchRequestVo cozyquickSearchRequestVo);
+    BaseResponse<Object> search(CozyquickSearchRequestVo cozyquickSearchRequestVo, String ip);
 
-    BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo);
+    BaseResponse<Object> access(String clientIp);
 }
