@@ -21,9 +21,9 @@ public class CozyquickServiceImpl implements CozyquickService {
     private final CozyquickAccessRepository cozyquickAccessRepository;
 
     @Override
-    public BaseResponse<Object> search(CozyquickSearchRequestVo cozyquickSearchRequestVo) {
+    public BaseResponse<Object> search(CozyquickSearchRequestVo cozyquickSearchRequestVo, String clientIp) {
         Optional<Cozyquick> cozyquickOpt = cozyquickRepository.findCozyquickByIp(
-            cozyquickSearchRequestVo.getIp());
+            clientIp);
 
         if (cozyquickOpt.isPresent()) {
             return BaseResponse.builder()
@@ -37,7 +37,7 @@ public class CozyquickServiceImpl implements CozyquickService {
         try {
             cozyquickRepository.save(Cozyquick.builder()
                 .search(cozyquickSearchRequestVo.getSearch())
-                .ip(cozyquickSearchRequestVo.getIp())
+                .ip(clientIp)
                 .build());
             return BaseResponse.builder()
                 .success(true)
