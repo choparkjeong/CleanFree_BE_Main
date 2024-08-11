@@ -16,10 +16,12 @@ public class CozyquickAccess extends MongoBaseTimeEntity {
     private String id;
     @Indexed(unique = true)
     private String ip;
+    private int count;
 
     @Builder
-    public CozyquickAccess(String id, String ip) {
+    public CozyquickAccess(String id, String ip, int count) {
         this.id = id;
         this.ip = ip;
+        this.count = count;
     }
 }

@@ -61,16 +61,23 @@ public class CozyquickServiceImpl implements CozyquickService {
             clientIp);
 
         if (cozyquickAccessOpt.isPresent()) {
+            CozyquickAccess cozyquickAccess = cozyquickAccessOpt.get();
+            cozyquickAccessRepository.save(CozyquickAccess.builder()
+                    .id(cozyquickAccess.getId())
+                    .ip(cozyquickAccess.getIp())
+                    .count(cozyquickAccess.getCount() + 1)
+                .build());
             return BaseResponse.builder()
                 .success(false)
                 .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
-                .message("already existed ip. fail to save ip.")
+                .message("already existed ip. update count.")
                 .data(null)
                 .build();
         }
 
         cozyquickAccessRepository.save(CozyquickAccess.builder()
             .ip(clientIp)
+            .count(0)
             .build());
 
         return BaseResponse.builder()

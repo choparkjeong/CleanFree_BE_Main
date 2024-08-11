@@ -15,10 +15,12 @@ public class VisaAccess extends MongoBaseTimeEntity {
     private String id;
     @Indexed(unique = true)
     private String ip;
+    private int count;
 
     @Builder
-    public VisaAccess(String id, String ip) {
+    public VisaAccess(String id, String ip, int count) {
         this.id = id;
         this.ip = ip;
+        this.count = count;
     }
 }

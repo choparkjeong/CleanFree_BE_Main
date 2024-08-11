@@ -2,12 +2,14 @@ package site.cleanfree.be_main.cookingstation;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CookingStationService {
 
     private final CookingStationRepository cookingStationRepository;
@@ -49,16 +51,23 @@ public class CookingStationService {
             clientIp);
 
         if (cookingStationAccessOpt.isPresent()) {
+            CookingStationAccess cookingStationAccess = cookingStationAccessOpt.get();
+            cookingStationAccessRepository.save(CookingStationAccess.builder()
+                    .id(cookingStationAccess.getId())
+                    .ip(cookingStationAccess.getIp())
+                    .count(cookingStationAccess.getCount() + 1)
+                .build());
             return BaseResponse.builder()
-                .success(false)
+                .success(true)
                 .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
-                .message("already existed ip. fail to save ip.")
+                .message("already existed ip. update count.")
                 .data(null)
                 .build();
         }
 
         cookingStationAccessRepository.save(CookingStationAccess.builder()
             .ip(clientIp)
+            .count(0)
             .build());
 
         return BaseResponse.builder()

@@ -48,6 +48,12 @@ public class CureSilverService {
             clientIp);
 
         if (cureSilverAccessOpt.isPresent()) {
+            CureSilverAccess cureSilverAccess = cureSilverAccessOpt.get();
+            cureSilverAccessRepository.save(CureSilverAccess.builder()
+                    .id(cureSilverAccess.getId())
+                    .ip(cureSilverAccess.getIp())
+                    .count(cureSilverAccess.getCount() + 1)
+                .build());
             return BaseResponse.builder()
                 .success(false)
                 .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
@@ -58,6 +64,7 @@ public class CureSilverService {
 
         cureSilverAccessRepository.save(CureSilverAccess.builder()
             .ip(clientIp)
+            .count(0)
             .build());
 
         return BaseResponse.builder()

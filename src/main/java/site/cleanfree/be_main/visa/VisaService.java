@@ -41,15 +41,22 @@ public class VisaService {
         Optional<VisaAccess> visaAccessOpt = visaAccessRepository.findVisaAccessByIp(clientIp);
 
         if (visaAccessOpt.isPresent()) {
+            VisaAccess visaAccess = visaAccessOpt.get();
+            visaAccessRepository.save(VisaAccess.builder()
+                    .id(visaAccess.getId())
+                    .ip(visaAccess.getIp())
+                    .count(visaAccess.getCount() + 1)
+                .build());
             return BaseResponse.builder()
                 .success(false)
                 .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
-                .message("already accessed")
+                .message("already existed ip. update count.")
                 .build();
         }
 
         visaAccessRepository.save(VisaAccess.builder()
             .ip(clientIp)
+            .count(0)
             .build());
 
         return BaseResponse.builder()
