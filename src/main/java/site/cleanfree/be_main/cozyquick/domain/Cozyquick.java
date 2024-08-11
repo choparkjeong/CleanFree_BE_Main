@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import site.cleanfree.be_main.common.MongoBaseTimeEntity;
 
 @Getter
-@Document(collection = "cozyquick")
+@Document(collection = "cozy_quick")
 public class Cozyquick extends MongoBaseTimeEntity {
 
     @Id
