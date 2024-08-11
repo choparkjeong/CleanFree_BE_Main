@@ -77,7 +77,7 @@ public class CozyquickServiceImpl implements CozyquickService {
 
         cozyquickAccessRepository.save(CozyquickAccess.builder()
             .ip(clientIp)
-            .count(0)
+            .count(1)
             .build());
 
         return BaseResponse.builder()

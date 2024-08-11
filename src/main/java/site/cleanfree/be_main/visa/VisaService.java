@@ -56,7 +56,7 @@ public class VisaService {
 
         visaAccessRepository.save(VisaAccess.builder()
             .ip(clientIp)
-            .count(0)
+            .count(1)
             .build());
 
         return BaseResponse.builder()
