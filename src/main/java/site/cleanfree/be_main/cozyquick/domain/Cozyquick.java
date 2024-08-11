@@ -14,13 +14,13 @@ public class Cozyquick extends MongoBaseTimeEntity {
     @Id
     private String id;
     @Indexed(unique = true)
-    private String searchId;
+    private String ip;
     private String search;
 
     @Builder
-    public Cozyquick(String id, String searchId, String search) {
+    public Cozyquick(String id, String ip, String search) {
         this.id = id;
-        this.searchId = searchId;
+        this.ip = ip;
         this.search = search;
     }
 }

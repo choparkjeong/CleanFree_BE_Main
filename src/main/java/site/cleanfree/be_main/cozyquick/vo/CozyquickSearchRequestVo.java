@@ -6,4 +6,5 @@ import lombok.Getter;
 public class CozyquickSearchRequestVo {
 
     private String search;
+    private String ip;
 }

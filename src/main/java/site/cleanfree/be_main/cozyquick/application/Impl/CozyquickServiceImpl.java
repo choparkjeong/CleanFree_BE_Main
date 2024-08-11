@@ -1,5 +1,6 @@
 package site.cleanfree.be_main.cozyquick.application.Impl;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.cleanfree.be_main.common.BaseResponse;
@@ -18,12 +19,22 @@ public class CozyquickServiceImpl implements CozyquickService {
 
     @Override
     public BaseResponse<Object> search(CozyquickSearchRequestVo cozyquickSearchRequestVo) {
-        String searchId = UuidProvider.generateAnyId();
+        Optional<Cozyquick> cozyquickOpt = cozyquickRepository.findCozyquickByIp(
+            cozyquickSearchRequestVo.getIp());
+
+        if (cozyquickOpt.isPresent()) {
+            return BaseResponse.builder()
+                .success(false)
+                .errorCode(null)
+                .message("already existed ip. fail to save search data.")
+                .data(null)
+                .build();
+        }
 
         try {
             cozyquickRepository.save(Cozyquick.builder()
-                .searchId(searchId)
                 .search(cozyquickSearchRequestVo.getSearch())
+                .ip(cozyquickSearchRequestVo.getIp())
                 .build());
             return BaseResponse.builder()
                 .success(true)
