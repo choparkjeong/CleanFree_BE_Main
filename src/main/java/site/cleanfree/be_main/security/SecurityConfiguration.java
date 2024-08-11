@@ -53,7 +53,7 @@ public class SecurityConfiguration {
                         "/v3/api-docs/**", "/health-check", "/api/v1/cozyquick/**",
                         "/api/v1/createvalue/**", "/api/v1/consultant/**",
                         "/api/v1/cookingstation/**", "/api/v1/curesilver/**",
-                        "/api/v1/carrycabin/**", "/api/v1/access/**")
+                        "/api/v1/carrycabin/**", "/api/v1/access/**", "/api/v1/visa/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()

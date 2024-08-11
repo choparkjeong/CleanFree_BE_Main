@@ -14,6 +14,7 @@ import site.cleanfree.be_main.cookingstation.CookingStationService;
 import site.cleanfree.be_main.cozyquick.application.CozyquickService;
 import site.cleanfree.be_main.createvalue.application.CreatevalueService;
 import site.cleanfree.be_main.curesilver.CureSilverService;
+import site.cleanfree.be_main.visa.VisaService;
 
 @RestController
 @RequestMapping("/api/v1/access")
@@ -26,6 +27,7 @@ public class AccessIpController {
     private final CozyquickService cozyquickService;
     private final CreatevalueService createvalueService;
     private final CureSilverService cureSilverService;
+    private final VisaService visaService;
 
     @PostMapping
     public ResponseEntity<BaseResponse<Object>> access(
@@ -40,6 +42,7 @@ public class AccessIpController {
             case "cozyquick" -> ResponseEntity.ok(cozyquickService.access(ipSaveRequestVo));
             case "createvalue" -> ResponseEntity.ok(createvalueService.access(ipSaveRequestVo));
             case "curesilver" -> ResponseEntity.ok(cureSilverService.access(ipSaveRequestVo));
+            case "clearvisa" -> ResponseEntity.ok(visaService.access(ipSaveRequestVo));
             default -> ResponseEntity.ok(BaseResponse.builder()
                 .success(false)
                 .errorCode(ErrorStatus.BAD_DATA.getCode())
