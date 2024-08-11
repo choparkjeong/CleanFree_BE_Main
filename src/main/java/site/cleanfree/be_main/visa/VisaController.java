@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import site.cleanfree.be_main.common.BaseResponse;
 
 @RestController
-@RequestMapping("/api/v1/visa")
+@RequestMapping("/api/v1/clearvisa")
 @RequiredArgsConstructor
 public class VisaController {
 
