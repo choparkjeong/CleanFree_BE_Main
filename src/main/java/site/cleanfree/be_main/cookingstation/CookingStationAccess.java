@@ -5,10 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import site.cleanfree.be_main.common.MongoBaseTimeEntity;
 
 @Getter
 @Document(collection = "cooking_station_access")
-public class CookingStationAccess {
+public class CookingStationAccess extends MongoBaseTimeEntity {
 
     @Id
     private String id;
