@@ -1,6 +1,8 @@
 package site.cleanfree.be_main.common.accessip;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ import site.cleanfree.be_main.createvalue.application.CreatevalueService;
 import site.cleanfree.be_main.curesilver.CureSilverService;
 import site.cleanfree.be_main.visa.VisaService;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/access")
 @RequiredArgsConstructor
@@ -31,8 +34,25 @@ public class AccessIpController {
 
     @PostMapping
     public ResponseEntity<BaseResponse<Object>> access(
+        HttpServletRequest request,
         @RequestBody IpSaveRequestVo ipSaveRequestVo
     ) {
+        String clientIp = request.getHeader("X-Forwarded-For");
+        log.info("clientIp: {}", clientIp);
+        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("Proxy-Client-IP");
+            log.info("clientIp: {}", clientIp);
+        }
+        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("WL-Proxy-Client-IP");
+            log.info("clientIp: {}", clientIp);
+        }
+        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getRemoteAddr();
+            log.info("clientIp: {}", clientIp);
+        }
+        log.info("clientIp: {}", clientIp);
+
         String service = ipSaveRequestVo.getService();
         return switch (service) {
             case "carrycabin" -> ResponseEntity.ok(carryCabinService.access(ipSaveRequestVo));
