@@ -4,6 +4,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.cleanfree.be_main.common.BaseResponse;
+import site.cleanfree.be_main.common.accessip.IpSaveRequestVo;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
 
 @Service
@@ -11,6 +12,7 @@ import site.cleanfree.be_main.common.exception.ErrorStatus;
 public class CarryCabinService {
 
     private final CarryCabinRepository carryCabinRepository;
+    private final CarryCabinAccessRepository carryCabinAccessRepository;
 
     public BaseResponse<Object> register(CarryCabinRegisterRequestVo carryCabinRegisterRequestVo) {
         String ip = carryCabinRegisterRequestVo.getIp();
@@ -42,5 +44,30 @@ public class CarryCabinService {
                 .message("failed save registered.")
                 .build();
         }
+    }
+
+    public BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo) {
+        Optional<CarryCabinAccess> carryCabinAccessOpt = carryCabinAccessRepository.findCarryCabinAccessByIp(
+            ipSaveRequestVo.getIp());
+
+        if (carryCabinAccessOpt.isPresent()) {
+            return BaseResponse.builder()
+                .success(false)
+                .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
+                .message("already existed ip. fail to save ip.")
+                .data(null)
+                .build();
+        }
+
+        carryCabinAccessRepository.save(CarryCabinAccess.builder()
+            .ip(ipSaveRequestVo.getIp())
+            .build());
+
+        return BaseResponse.builder()
+            .success(true)
+            .errorCode(null)
+            .message("success to save ip.")
+            .data(null)
+            .build();
     }
 }

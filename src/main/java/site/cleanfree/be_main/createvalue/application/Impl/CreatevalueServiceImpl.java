@@ -1,12 +1,17 @@
 package site.cleanfree.be_main.createvalue.application.Impl;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.cleanfree.be_main.carrycabin.CarryCabinAccess;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.UuidProvider;
+import site.cleanfree.be_main.common.accessip.IpSaveRequestVo;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
 import site.cleanfree.be_main.createvalue.application.CreatevalueService;
 import site.cleanfree.be_main.createvalue.domain.Createvalue;
+import site.cleanfree.be_main.createvalue.domain.CreatevalueAccess;
+import site.cleanfree.be_main.createvalue.infrastructure.CreatevalueAccessRepository;
 import site.cleanfree.be_main.createvalue.infrastructure.CreatevalueRepository;
 import site.cleanfree.be_main.createvalue.vo.CreatevalueSearchRequestVo;
 
@@ -15,6 +20,7 @@ import site.cleanfree.be_main.createvalue.vo.CreatevalueSearchRequestVo;
 public class CreatevalueServiceImpl implements CreatevalueService {
 
     private final CreatevalueRepository createvalueRepository;
+    private final CreatevalueAccessRepository createvalueAccessRepository;
 
     public BaseResponse<Object> search(CreatevalueSearchRequestVo createvalueSearchRequestVo) {
         String searchId = UuidProvider.generateAnyId();
@@ -38,5 +44,30 @@ public class CreatevalueServiceImpl implements CreatevalueService {
                 .data(null)
                 .build();
         }
+    }
+
+    public BaseResponse<Object> access(IpSaveRequestVo ipSaveRequestVo) {
+        Optional<CreatevalueAccess> createvalueAccessOpt = createvalueAccessRepository.findCreatevalueAccessByIp(
+            ipSaveRequestVo.getIp());
+
+        if (createvalueAccessOpt.isPresent()) {
+            return BaseResponse.builder()
+                .success(false)
+                .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
+                .message("already existed ip. fail to save ip.")
+                .data(null)
+                .build();
+        }
+
+        createvalueAccessRepository.save(CreatevalueAccess.builder()
+            .ip(ipSaveRequestVo.getIp())
+            .build());
+
+        return BaseResponse.builder()
+            .success(true)
+            .errorCode(null)
+            .message("success to save ip.")
+            .data(null)
+            .build();
     }
 }
