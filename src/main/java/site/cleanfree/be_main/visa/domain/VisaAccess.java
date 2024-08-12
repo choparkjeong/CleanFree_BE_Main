@@ -1,4 +1,4 @@
-package site.cleanfree.be_main.cozyhouse;
+package site.cleanfree.be_main.visa.domain;
 
 import jakarta.persistence.Id;
 import lombok.Builder;
@@ -8,8 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import site.cleanfree.be_main.common.MongoBaseTimeEntity;
 
 @Getter
-@Document(collection = "cozy_house_access")
-public class CozyHouseAccess extends MongoBaseTimeEntity {
+@Document(collection = "visa_access")
+public class VisaAccess extends MongoBaseTimeEntity {
 
     @Id
     private String id;
@@ -18,7 +18,7 @@ public class CozyHouseAccess extends MongoBaseTimeEntity {
     private int count;
 
     @Builder
-    public CozyHouseAccess(String id, String ip, int count) {
+    public VisaAccess(String id, String ip, int count) {
         this.id = id;
         this.ip = ip;
         this.count = count;

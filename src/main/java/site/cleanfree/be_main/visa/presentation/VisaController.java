@@ -1,4 +1,4 @@
-package site.cleanfree.be_main.visa;
+package site.cleanfree.be_main.visa.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.ClientIpAccessor;
+import site.cleanfree.be_main.visa.application.VisaService;
+import site.cleanfree.be_main.visa.vo.VisaRegisterRequestVo;
 
 @Slf4j
 @RestController
@@ -26,6 +28,6 @@ public class VisaController {
     ) {
         String clientIp = ClientIpAccessor.getIp(request);
 
-        return ResponseEntity.ok(visaService.register(clientIp));
+        return ResponseEntity.ok(visaService.register(clientIp, visaRegisterRequestVo));
     }
 }
