@@ -1,4 +1,4 @@
-package site.cleanfree.be_main.consultant;
+package site.cleanfree.be_main.consultant.domain;
 
 import jakarta.persistence.Id;
 import lombok.Builder;
@@ -15,10 +15,14 @@ public class Consultant extends MongoBaseTimeEntity {
     private String id;
     @Indexed(unique = true)
     private String ip;
+    private String name;
+    private String contact;
 
     @Builder
-    public Consultant(String id, String ip) {
+    public Consultant(String id, String ip, String name, String contact) {
         this.id = id;
         this.ip = ip;
+        this.name = name;
+        this.contact = contact;
     }
 }

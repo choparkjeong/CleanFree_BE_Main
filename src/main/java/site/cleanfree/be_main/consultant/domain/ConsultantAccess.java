@@ -1,4 +1,4 @@
-package site.cleanfree.be_main.consultant;
+package site.cleanfree.be_main.consultant.domain;
 
 import jakarta.persistence.Id;
 import lombok.Builder;

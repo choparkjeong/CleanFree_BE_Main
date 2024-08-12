@@ -1,12 +1,15 @@
-package site.cleanfree.be_main.consultant;
+package site.cleanfree.be_main.consultant.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.cleanfree.be_main.common.BaseResponse;
-import site.cleanfree.be_main.common.accessip.IpSaveRequestVo;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
-import site.cleanfree.be_main.curesilver.CureSilverAccess;
+import site.cleanfree.be_main.consultant.domain.Consultant;
+import site.cleanfree.be_main.consultant.domain.ConsultantAccess;
+import site.cleanfree.be_main.consultant.infrastructure.ConsultantAccessRepository;
+import site.cleanfree.be_main.consultant.infrastructure.ConsultantRepository;
+import site.cleanfree.be_main.consultant.vo.ConsultantRegisterRequestVo;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +18,8 @@ public class ConsultantService {
     private final ConsultantRepository consultantRepository;
     private final ConsultantAccessRepository consultantAccessRepository;
 
-    public BaseResponse<Object> register(String clientIp) {
+    public BaseResponse<Object> register(String clientIp,
+        ConsultantRegisterRequestVo consultantRegisterRequestVo) {
         Optional<Consultant> consultantOpt = consultantRepository.findConsultantByIp(clientIp);
 
         if (consultantOpt.isPresent()) {
@@ -29,6 +33,8 @@ public class ConsultantService {
         try {
             consultantRepository.save(Consultant.builder()
                 .ip(clientIp)
+                .name(consultantRegisterRequestVo.name())
+                .contact(consultantRegisterRequestVo.contact())
                 .build());
 
             return BaseResponse.<Object>builder()
@@ -52,9 +58,9 @@ public class ConsultantService {
         if (consultantAccessOpt.isPresent()) {
             ConsultantAccess consultantAccess = consultantAccessOpt.get();
             consultantAccessRepository.save(ConsultantAccess.builder()
-                    .id(consultantAccess.getId())
-                    .ip(consultantAccess.getIp())
-                    .count(consultantAccess.getCount() + 1)
+                .id(consultantAccess.getId())
+                .ip(consultantAccess.getIp())
+                .count(consultantAccess.getCount() + 1)
                 .build());
             return BaseResponse.builder()
                 .success(false)

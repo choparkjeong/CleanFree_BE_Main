@@ -1,4 +1,4 @@
-package site.cleanfree.be_main.consultant;
+package site.cleanfree.be_main.consultant.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.ClientIpAccessor;
+import site.cleanfree.be_main.consultant.vo.ConsultantRegisterRequestVo;
+import site.cleanfree.be_main.consultant.application.ConsultantService;
 
 @RestController
 @RequestMapping("/api/v1/consultant")
@@ -27,6 +29,6 @@ public class ConsultantController {
         @RequestBody ConsultantRegisterRequestVo consultantRegisterRequestVo
     ) {
         String clientIp = ClientIpAccessor.getIp(request);
-        return ResponseEntity.ok(consultantService.register(clientIp));
+        return ResponseEntity.ok(consultantService.register(clientIp, consultantRegisterRequestVo));
     }
 }

@@ -12,7 +12,7 @@ import site.cleanfree.be_main.carrycabin.CarryCabinService;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.ClientIpAccessor;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
-import site.cleanfree.be_main.consultant.ConsultantService;
+import site.cleanfree.be_main.consultant.application.ConsultantService;
 import site.cleanfree.be_main.cookingstation.CookingStationService;
 import site.cleanfree.be_main.cozyhouse.application.CozyHouseService;
 import site.cleanfree.be_main.cozyquick.application.CozyquickService;
