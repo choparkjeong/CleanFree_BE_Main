@@ -35,7 +35,7 @@ public class CozyHouseService {
                 .success(false)
                 .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
                 .message("fail to save data")
-                .data(null)
+                .data(e.getMessage())
                 .build();
         }
     }
