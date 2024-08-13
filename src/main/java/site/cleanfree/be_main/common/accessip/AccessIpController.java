@@ -12,7 +12,7 @@ import site.cleanfree.be_main.carrycabin.CarryCabinService;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.ClientIpAccessor;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
-import site.cleanfree.be_main.consultant.application.ConsultantService;
+import site.cleanfree.be_main.createeasy.application.CreateEasyService;
 import site.cleanfree.be_main.cookingstation.CookingStationService;
 import site.cleanfree.be_main.cozyhouse.application.CozyHouseService;
 import site.cleanfree.be_main.cozyquick.application.CozyquickService;
@@ -27,7 +27,7 @@ import site.cleanfree.be_main.visa.application.VisaService;
 public class AccessIpController {
 
     private final CarryCabinService carryCabinService;
-    private final ConsultantService consultantService;
+    private final CreateEasyService createEasyService;
     private final CookingStationService cookingStationService;
     private final CozyquickService cozyquickService;
     private final CreatevalueService createvalueService;
@@ -45,7 +45,7 @@ public class AccessIpController {
         String service = ipSaveRequestVo.getService();
         return switch (service) {
             case "carrycabin" -> ResponseEntity.ok(carryCabinService.access(clientIp));
-            case "consultant" -> ResponseEntity.ok(consultantService.access(clientIp));
+            case "createeasy" -> ResponseEntity.ok(createEasyService.access(clientIp));
             case "cookingstation" ->
                 ResponseEntity.ok(cookingStationService.access(clientIp));
             case "cozyquick" -> ResponseEntity.ok(cozyquickService.access(clientIp));

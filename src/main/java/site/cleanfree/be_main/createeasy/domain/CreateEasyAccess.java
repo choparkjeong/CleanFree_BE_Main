@@ -1,4 +1,4 @@
-package site.cleanfree.be_main.consultant.domain;
+package site.cleanfree.be_main.createeasy.domain;
 
 import jakarta.persistence.Id;
 import lombok.Builder;
@@ -8,21 +8,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import site.cleanfree.be_main.common.MongoBaseTimeEntity;
 
 @Getter
-@Document(collection = "consultant")
-public class Consultant extends MongoBaseTimeEntity {
+@Document(collection = "create_easy_access")
+public class CreateEasyAccess extends MongoBaseTimeEntity {
 
     @Id
     private String id;
     @Indexed(unique = true)
     private String ip;
-    private String name;
-    private String contact;
+    private int count;
 
     @Builder
-    public Consultant(String id, String ip, String name, String contact) {
+    public CreateEasyAccess(String id, String ip, int count) {
         this.id = id;
         this.ip = ip;
-        this.name = name;
-        this.contact = contact;
+        this.count = count;
     }
 }
