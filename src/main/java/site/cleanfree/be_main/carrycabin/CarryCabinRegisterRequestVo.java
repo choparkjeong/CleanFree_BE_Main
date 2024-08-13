@@ -6,5 +6,5 @@ import lombok.Getter;
 public class CarryCabinRegisterRequestVo {
 
     private String name;
-    private String contact;
+    private String email;
 }

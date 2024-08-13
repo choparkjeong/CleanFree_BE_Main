@@ -17,7 +17,7 @@ public class CarryCabinService {
         try {
             carryCabinRepository.save(CarryCabin.builder()
                 .name(carryCabinRegisterRequestVo.getName())
-                .contact(carryCabinRegisterRequestVo.getContact())
+                .email(carryCabinRegisterRequestVo.getEmail())
                 .build());
 
             return BaseResponse.<Object>builder()
