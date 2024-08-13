@@ -24,11 +24,9 @@ public class CarryCabinController {
     @PostMapping("/register")
     @Operation(summary = "사전 신청 API", description = "ip 주소를 기준으로 사전 신청을 저장합니다.")
     public ResponseEntity<BaseResponse<Object>> search(
-        HttpServletRequest request,
         @RequestBody CarryCabinRegisterRequestVo carryCabinRegisterRequestVo
     ) {
-        String clientIp = ClientIpAccessor.getIp(request);
-        return ResponseEntity.ok(carryCabinService.register(clientIp));
+        return ResponseEntity.ok(carryCabinService.register(carryCabinRegisterRequestVo));
     }
 
 }

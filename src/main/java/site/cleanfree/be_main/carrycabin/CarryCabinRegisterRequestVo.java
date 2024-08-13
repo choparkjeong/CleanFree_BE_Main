@@ -5,5 +5,6 @@ import lombok.Getter;
 @Getter
 public class CarryCabinRegisterRequestVo {
 
-    private String ip;
+    private String name;
+    private String contact;
 }

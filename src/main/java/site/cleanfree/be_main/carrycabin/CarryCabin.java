@@ -13,12 +13,13 @@ public class CarryCabin extends MongoBaseTimeEntity {
 
     @Id
     private String id;
-    @Indexed(unique = true)
-    private String ip;
+    private String name;
+    private String contact;
 
     @Builder
-    public CarryCabin(String id, String ip) {
+    public CarryCabin(String id, String name, String contact) {
         this.id = id;
-        this.ip = ip;
+        this.name = name;
+        this.contact = contact;
     }
 }
