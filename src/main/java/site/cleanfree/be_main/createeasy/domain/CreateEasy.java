@@ -1,4 +1,4 @@
-package site.cleanfree.be_main.createvalue.domain;
+package site.cleanfree.be_main.createeasy.domain;
 
 import jakarta.persistence.Id;
 import lombok.Builder;
@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import site.cleanfree.be_main.common.MongoBaseTimeEntity;
 
 @Getter
-@Document(collection = "create_value")
-public class Createvalue extends MongoBaseTimeEntity {
+@Document(collection = "create_easy")
+public class CreateEasy extends MongoBaseTimeEntity {
 
     @Id
     private String id;
@@ -16,7 +16,7 @@ public class Createvalue extends MongoBaseTimeEntity {
     private String phoneNumber;
 
     @Builder
-    public Createvalue(String id, String name, String phoneNumber) {
+    public CreateEasy(String id, String name, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
