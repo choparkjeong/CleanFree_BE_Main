@@ -17,7 +17,7 @@ import site.cleanfree.be_main.cookingstation.CookingStationService;
 import site.cleanfree.be_main.cozyhouse.application.CozyHouseService;
 import site.cleanfree.be_main.cozyquick.application.CozyquickService;
 import site.cleanfree.be_main.createvalue.application.CreatevalueService;
-import site.cleanfree.be_main.curesilver.CureSilverService;
+import site.cleanfree.be_main.curesilver.application.CureSilverService;
 import site.cleanfree.be_main.visa.application.VisaService;
 
 @Slf4j

@@ -1,10 +1,15 @@
-package site.cleanfree.be_main.curesilver;
+package site.cleanfree.be_main.curesilver.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.cleanfree.be_main.common.BaseResponse;
 import site.cleanfree.be_main.common.exception.ErrorStatus;
+import site.cleanfree.be_main.curesilver.domain.CureSilver;
+import site.cleanfree.be_main.curesilver.domain.CureSilverAccess;
+import site.cleanfree.be_main.curesilver.infrastructure.CureSilverAccessRepository;
+import site.cleanfree.be_main.curesilver.infrastructure.CureSilverRepository;
+import site.cleanfree.be_main.curesilver.vo.CureSilverRegisterRequestVo;
 
 @Service
 @RequiredArgsConstructor
@@ -13,20 +18,11 @@ public class CureSilverService {
     private final CureSilverRepository cureSilverRepository;
     private final CureSilverAccessRepository cureSilverAccessRepository;
 
-    public BaseResponse<Object> register(String clientIp) {
-        Optional<CureSilver> cureSilverOpt = cureSilverRepository.findCureSilverByIp(clientIp);
-
-        if (cureSilverOpt.isPresent()) {
-            return BaseResponse.<Object>builder()
-                .success(false)
-                .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
-                .message("already applied. not registered.")
-                .build();
-        }
-
+    public BaseResponse<Object> register(CureSilverRegisterRequestVo cureSilverRegisterRequestVo) {
         try {
             cureSilverRepository.save(CureSilver.builder()
-                .ip(clientIp)
+                .name(cureSilverRegisterRequestVo.name())
+                .phoneNumber(cureSilverRegisterRequestVo.phoneNumber())
                 .build());
 
             return BaseResponse.<Object>builder()
@@ -50,9 +46,9 @@ public class CureSilverService {
         if (cureSilverAccessOpt.isPresent()) {
             CureSilverAccess cureSilverAccess = cureSilverAccessOpt.get();
             cureSilverAccessRepository.save(CureSilverAccess.builder()
-                    .id(cureSilverAccess.getId())
-                    .ip(cureSilverAccess.getIp())
-                    .count(cureSilverAccess.getCount() + 1)
+                .id(cureSilverAccess.getId())
+                .ip(cureSilverAccess.getIp())
+                .count(cureSilverAccess.getCount() + 1)
                 .build());
             return BaseResponse.builder()
                 .success(false)

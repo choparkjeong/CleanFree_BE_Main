@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                     .requestMatchers("https://cleanfree.store", "/api/v1/auth/login",
                         "/api/v1/auth/signup", "/api/v1/auth/is-member", "/swagger-ui/**",
                         "/v3/api-docs/**", "/health-check", "/api/v1/cozyquick/**",
-                        "/api/v1/createvalue/**", "/api/v1/consultant/**",
+                        "/api/v1/createvalue/**", "/api/v1/createeasy/**",
                         "/api/v1/cookingstation/**", "/api/v1/curesilver/**",
                         "/api/v1/carrycabin/**", "/api/v1/access", "/api/v1/clearvisa/**",
                         "/api/v1/cozyhouse/**")
