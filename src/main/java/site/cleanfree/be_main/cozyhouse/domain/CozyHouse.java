@@ -13,16 +13,13 @@ public class CozyHouse extends MongoBaseTimeEntity {
 
     @Id
     private String id;
-    @Indexed(unique = true)//TODO: IP로 중복신청 거를건지
-    private String ip;
     private String name;
     private String phoneNumber;
 
 
     @Builder
-    public CozyHouse(String id, String ip, String name, String phoneNumber) {
+    public CozyHouse(String id, String name, String phoneNumber) {
         this.id = id;
-        this.ip = ip;
         this.name = name;
         this.phoneNumber = phoneNumber;
     }

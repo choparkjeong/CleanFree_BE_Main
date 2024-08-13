@@ -23,11 +23,8 @@ public class VisaController {
 
     @PostMapping("/register")
     public ResponseEntity<BaseResponse<Object>> register(
-        HttpServletRequest request,
         @RequestBody VisaRegisterRequestVo visaRegisterRequestVo
     ) {
-        String clientIp = ClientIpAccessor.getIp(request);
-
-        return ResponseEntity.ok(visaService.register(clientIp, visaRegisterRequestVo));
+        return ResponseEntity.ok(visaService.register(visaRegisterRequestVo));
     }
 }

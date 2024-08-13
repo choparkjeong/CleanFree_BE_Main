@@ -18,30 +18,27 @@ public class VisaService {
     private final VisaRepository visaRepository;
     private final VisaAccessRepository visaAccessRepository;
 
-    public BaseResponse<Object> register(String clientIp,
-        VisaRegisterRequestVo visaRegisterRequestVo) {
-        Optional<Visa> visaOpt = visaRepository.findVisaByIp(clientIp);
+    public BaseResponse<Object> register(VisaRegisterRequestVo visaRegisterRequestVo) {
+        try {
+            visaRepository.save(Visa.builder()
+                .name(visaRegisterRequestVo.name())
+                .phoneNumber(visaRegisterRequestVo.phoneNumber())
+                .build());
 
-        if (visaOpt.isPresent()) {
+            return BaseResponse.builder()
+                .success(true)
+                .errorCode(null)
+                .message("success to save registration")
+                .data(null)
+                .build();
+        } catch (Exception e) {
             return BaseResponse.builder()
                 .success(false)
                 .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
-                .message("already registered")
+                .message("fail to save registration")
+                .data(null)
                 .build();
         }
-
-        visaRepository.save(Visa.builder()
-            .ip(clientIp)
-            .name(visaRegisterRequestVo.name())
-            .phoneNumber(visaRegisterRequestVo.phoneNumber())
-            .build());
-
-        return BaseResponse.builder()
-            .success(true)
-            .errorCode(null)
-            .message("success to save ip.")
-            .data(null)
-            .build();
     }
 
     public BaseResponse<Object> access(String clientIp) {

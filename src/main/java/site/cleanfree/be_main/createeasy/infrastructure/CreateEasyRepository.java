@@ -6,5 +6,4 @@ import site.cleanfree.be_main.createeasy.domain.CreateEasy;
 
 public interface CreateEasyRepository extends MongoRepository<CreateEasy, String> {
 
-    Optional<CreateEasy> findConsultantByIp(String ip);
 }

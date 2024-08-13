@@ -13,15 +13,12 @@ public class Visa extends MongoBaseTimeEntity {
 
     @Id
     private String id;
-    @Indexed(unique = true)
-    private String ip;
     private String name;
     private String phoneNumber;
 
     @Builder
-    public Visa(String id, String ip, String name, String phoneNumber) {
+    public Visa(String id, String name, String phoneNumber) {
         this.id = id;
-        this.ip = ip;
         this.name = name;
         this.phoneNumber = phoneNumber;
     }

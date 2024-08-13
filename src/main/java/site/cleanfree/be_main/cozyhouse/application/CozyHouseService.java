@@ -18,39 +18,26 @@ public class CozyHouseService {
     private final CozyHouseRepository cozyHouseRepository;
     private final CozyHouseAccessRepository cozyHouseAccessRepository;
 
-    public BaseResponse<Object> register(String clientIp,
-        CozyHouseRegisterRequestVo cozyHouseRegisterRequestVo) {
-        Optional<CozyHouse> cozyHouseOpt = cozyHouseRepository.findCozyHouseByIp(clientIp);
-
-        if (cozyHouseOpt.isEmpty()) {
-            try {
-                cozyHouseRepository.save(CozyHouse.builder()
-                    .ip(clientIp)
-                    .name(cozyHouseRegisterRequestVo.name())
-                    .phoneNumber(cozyHouseRegisterRequestVo.phoneNumber())
-                    .build());
-                return BaseResponse.builder()
-                    .success(true)
-                    .errorCode(null)
-                    .message("success to save data")
-                    .data(null)
-                    .build();
-            } catch (Exception e) {
-                return BaseResponse.builder()
-                    .success(false)
-                    .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
-                    .message("fail to save data")
-                    .data(null)
-                    .build();
-            }
+    public BaseResponse<Object> register(CozyHouseRegisterRequestVo cozyHouseRegisterRequestVo) {
+        try {
+            cozyHouseRepository.save(CozyHouse.builder()
+                .name(cozyHouseRegisterRequestVo.name())
+                .phoneNumber(cozyHouseRegisterRequestVo.phoneNumber())
+                .build());
+            return BaseResponse.builder()
+                .success(true)
+                .errorCode(null)
+                .message("success to save data")
+                .data(null)
+                .build();
+        } catch (Exception e) {
+            return BaseResponse.builder()
+                .success(false)
+                .errorCode(ErrorStatus.DATA_PERSIST_ERROR.getCode())
+                .message("fail to save data")
+                .data(null)
+                .build();
         }
-
-        return BaseResponse.builder()
-            .success(false)
-            .errorCode(ErrorStatus.BAD_DATA.getCode())
-            .message("already saved ip")
-            .data(null)
-            .build();
     }
 
     public BaseResponse<Object> access(String clientIp) {

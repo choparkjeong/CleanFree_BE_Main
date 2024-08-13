@@ -6,5 +6,4 @@ import site.cleanfree.be_main.cozyhouse.domain.CozyHouse;
 
 public interface CozyHouseRepository extends MongoRepository<CozyHouse, String> {
 
-    Optional<CozyHouse> findCozyHouseByIp(String ip);
 }
